@@ -28,10 +28,10 @@ public partial class CookMasterDbContext : DbContext
 
     public virtual DbSet<UserMenu> UserMenus { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer("Server=localhost,1433;Database=CookMasterDB;User Id=sa;Password=Your@Password;TrustServerCertificate=True");
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    optionsBuilder.UseSqlServer("Server=localhost,1433;Database=CookMasterDB;User Id=sa;Password=Your@Password;TrustServerCertificate=True");
+    //}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
