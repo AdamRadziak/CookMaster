@@ -1,0 +1,1 @@
+﻿dotnet ef dbcontext scaffold "Server=localhost,1433;Database=CookMasterDB;User Id=sa;Password=Your@Password;TrustServerCertificate=True" Microsoft.EntityFrameworkCore.SqlServer --context-dir Context -o Model --context-namespace CookMaster.Persistance.SqlServer.Context --namespace CookMaster.Persistance.SqlServer.Model -f -v

@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  cookmaster.webapi:
+    image: ${DOCKER_REGISTRY-}cookmasterwebapi
+    build:
+      context: .
+      dockerfile: CookMaster.WebApi/Dockerfile
+    depends_on: 
+    - cookmaster_db
+  cookmaster_db:
+    # Docker Image for MSSQL
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your@Password
+    ports:
+      - "1433:1433"
+    volumes:
+      - cookmaster_data:/var/opt/mssql
+
+# Named volumes section
+volumes:
+  # SQL Server data volume
+  cookmaster_data:
+    # Define the volume to persist SQL Server data
+    
