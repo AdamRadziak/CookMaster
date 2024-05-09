@@ -9,6 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace CookMaster.WebApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
