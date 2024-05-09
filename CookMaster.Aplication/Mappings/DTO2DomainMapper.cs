@@ -21,5 +21,13 @@ namespace CookMaster.Aplication.Mappings
             Product product = mapper.Map<Product>(dto);
             return product;
         }
+
+        public static Step MapStep(this AddUpdateStepDTO dto)
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<AddUpdateStepDTO, Step>());
+            var mapper = new Mapper(config);
+            Step step = mapper.Map<Step>(dto);
+            return step;
+        }
     }
 }

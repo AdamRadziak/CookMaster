@@ -7,6 +7,8 @@ namespace CookMaster.Persistence.UOW.Interfaces
         IUserRepository UserRepository { get; }
 
         IProductRepository ProductRepository { get; }
+
+        IStepRepository StepRepository { get; }
         IGenericRepository<T> Repository<T>() where T : class;
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

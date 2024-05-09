@@ -1,6 +1,9 @@
-﻿namespace CookMaster.Persistence.Repositories.Interfaces
+﻿using CookMaster.Persistance.SqlServer.Model;
+
+namespace CookMaster.Persistence.Repositories.Interfaces
 {
-    internal interface IStepRepository
+    public interface IStepRepository : IGenericRepository<Step>
     {
+        Task<bool> StepExistAsync(int id);
     }
 }

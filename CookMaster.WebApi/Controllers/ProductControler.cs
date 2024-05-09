@@ -16,11 +16,11 @@ namespace CookMaster.WebApi.Controllers
     [Route("api/Products")]
     public class ProductControler : ControllerBase
     {
-        private readonly IProductService _service;
+        private readonly IProductService _productService;
         private readonly ILogger<ProductControler> _logger;
         public ProductControler(IProductService service, ILogger<ProductControler> logger)
         {
-            _service = service;
+            _productService = service;
             _logger = logger;
         }
 
@@ -28,21 +28,21 @@ namespace CookMaster.WebApi.Controllers
         [SwaggerOperation(OperationId = "GetProductById")]
         public async Task<ActionResult<GetSingleProductDTO>> GetProduct(int id)
         {
-            var result = await _service.GetByIdAsync(id);
+            var result = await _productService.GetByIdAsync(id);
 
             if (!result.IsSuccess)
             {
                 return Problem(statusCode: (int)result.StatusCode, title: "Read error.", detail: result.ErrorMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleProductDTO);
+            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleProductDTO());
         }
 
         [HttpGet("list")]
         [SwaggerOperation(OperationId = "GetProducts")]
         public async Task<ActionResult<IPagedList<GetSingleProductDTO>>> GetProducts([FromQuery] SieveModel paginationParams)
         {
-            var result = await _service.SearchAsync(paginationParams, resultEntity => Domain2DTOMapper.MapGetSingleProductDTO(resultEntity));
+            var result = await _productService.SearchAsync(paginationParams, resultEntity => Domain2DTOMapper.MapGetSingleProductDTO(resultEntity));
 
             if (!result.IsSuccess)
             {
@@ -56,7 +56,7 @@ namespace CookMaster.WebApi.Controllers
         [SwaggerOperation(OperationId = "AddProduct")]
         public async Task<ActionResult<GetSingleProductDTO>> AddProduct([FromBody] AddUpdateProductDTO dto)
         {
-            var result = await _service.CreateNewProductAsync(dto);
+            var result = await _productService.CreateNewProductAsync(dto);
 
             if (!result.IsSuccess)
             {
@@ -70,7 +70,7 @@ namespace CookMaster.WebApi.Controllers
         [SwaggerOperation(OperationId = "UpdateProduct")]
         public async Task<ActionResult<GetSingleProductDTO>> UpdateProduct(int id, [FromBody] AddUpdateProductDTO dto)
         {
-            var result = await _service.UpdateProductAsync(dto, id);
+            var result = await _productService.UpdateProductAsync(dto, id);
 
             if (!result.IsSuccess)
             {
@@ -84,7 +84,7 @@ namespace CookMaster.WebApi.Controllers
         [SwaggerOperation(OperationId = "DeleteProduct")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var result = await _service.DeleteAndSaveAsync(id);
+            var result = await _productService.DeleteAndSaveAsync(id);
 
             if (!result.IsSuccess)
             {

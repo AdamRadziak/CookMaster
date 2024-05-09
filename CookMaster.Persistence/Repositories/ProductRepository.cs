@@ -9,9 +9,10 @@ namespace CookMaster.Persistence.Repositories
     {
         public ProductRepository(CookMasterDbContext dbContext) : base(dbContext) { }
 
-        public async Task<bool> ProductExistAsync(string name)
+
+        public async Task<bool> ProductEditAllowedAsync(string name)
         {
-            return await Entities.AnyAsync(e => e.Name == name);
+            return await Entities.AnyAsync(e => e.Name != name);
         }
     }
 }

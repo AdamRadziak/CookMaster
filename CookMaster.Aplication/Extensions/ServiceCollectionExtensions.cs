@@ -26,7 +26,8 @@ namespace CookMaster.Aplication.Extensions
                 .AddScoped<ISieveCustomFilterMethods, SieveCustomFilterMethods>()
                 .AddScoped<ISieveProcessor, ApplicationSieveProcessor>()
                 .AddScoped(typeof(IUserService), typeof(UserService))
-                .AddScoped(typeof(IProductService), typeof(ProductService));
+                .AddScoped(typeof(IProductService), typeof(ProductService))
+                .AddScoped(typeof(IStepService), typeof(StepService));
 
             services.AddScoped<IValidator<AddUpdateUserDTO>, AddUpdateUserDTOValidator>();
             // services.AddScoped<IValidator<AddUpdateProductDTO>, AddUpdateProductDTOValidator>();

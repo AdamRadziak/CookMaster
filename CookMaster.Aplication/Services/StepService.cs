@@ -1,8 +1,9 @@
 ﻿using CookMaster.Aplication.DTOs;
+using CookMaster.Aplication.Mappings;
 using CookMaster.Aplication.Services.Interfaces;
 using CookMaster.Persistance.SqlServer.Model;
+using CookMaster.Persistence.UOW;
 using CookMaster.Persistence.UOW.Interfaces;
-using CookMaster.Aplication.Mappings;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sieve.Models;
@@ -16,23 +17,20 @@ using System.Threading.Tasks;
 
 namespace CookMaster.Aplication.Services
 {
-    public class ProductService : BaseService<Product>, IProductService
+    public class StepService : BaseService<Step>, IStepService
     {
-        public ProductService(ILogger<Product> logger,
+        public StepService(ILogger<Step> logger,
                                   ISieveProcessor sieveProcessor,
                                   IOptions<SieveOptions> sieveOptions,
                                   IUnitOfWork unitOfWork)
             : base(logger, sieveProcessor, sieveOptions, unitOfWork) { }
-    public async Task<(bool IsSuccess, Product? entity, HttpStatusCode StatusCode, string ErrorMessage)> CreateNewProductAsync(AddUpdateProductDTO dto)
+
+        public async Task<(bool IsSuccess, Step? entity, HttpStatusCode StatusCode, string ErrorMessage)> CreateNewStepAsync(AddUpdateStepDTO dto)
         {
             try
             {
-                if (await _unitOfWork.ProductRepository.ProductEditAllowedAsync(dto.Name))
-                {
-                    return (false, default(Product), HttpStatusCode.BadRequest, "Product name: " + dto.Name + " already exist in the database");
-                }
 
-                var newEntity = dto.MapProduct();
+                var newEntity = dto.MapStep();
 
                 var result = await AddAndSaveAsync(newEntity);
                 return (true, result.entity, HttpStatusCode.OK, string.Empty);
@@ -43,7 +41,7 @@ namespace CookMaster.Aplication.Services
             }
         }
 
-        public async Task<(bool IsSuccess, Product? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateProductAsync(AddUpdateProductDTO dto, int id)
+        public async Task<(bool IsSuccess, Step? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateStepAsync(AddUpdateStepDTO dto, int id)
         {
             try
             {
@@ -54,12 +52,8 @@ namespace CookMaster.Aplication.Services
                     return existingEntityResult;
                 }
 
-                if (!await _unitOfWork.ProductRepository.ProductEditAllowedAsync(dto.Name))
-                {
-                    return (false, default(Product), HttpStatusCode.BadRequest, "Product name: " + dto.Name + " not exist in the database");
-                }
 
-                var domainEntity = dto.MapProduct();
+                var domainEntity = dto.MapStep();
 
                 domainEntity.Id = id;
 
@@ -70,6 +64,9 @@ namespace CookMaster.Aplication.Services
             {
                 return LogError(ex.Message);
             }
+
         }
-    }
 }
+
+
+    }
