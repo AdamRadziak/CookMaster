@@ -14,10 +14,6 @@ namespace CookMaster.Persistence.Repositories
             return await Entities.AnyAsync(e => e.Email == email);
         }
 
-        public async Task<bool> PasswordCorrectAsync(string password, int id)
-        {
-            return await Entities.AnyAsync(e => e.Password == password && e.Id == id);
-        }
 
         public async Task<User?> GetByEmailAsync(string email)
         {

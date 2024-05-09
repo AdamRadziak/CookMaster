@@ -14,6 +14,14 @@ namespace CookMaster.Aplication.Mappings
             return dto;
         }
 
+        public static GetSingleProductDTO MapGetSingleProductDTO(this Product domainProdcut)
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Product, GetSingleProductDTO>());
+            var mapper = new Mapper(config);
+            GetSingleProductDTO dto = mapper.Map<GetSingleProductDTO>(domainProdcut);
+            return dto;
+        }
+
 
     }
 }

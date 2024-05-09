@@ -2,8 +2,8 @@
 
 namespace CookMaster.Persistence.Repositories.Interfaces
 {
-    public interface IProductRepository
+    public interface IProductRepository: IGenericRepository<Product>
     {
-        Task<Product?> GetByIdAsync(int id);
+        Task<bool> ProductExistAsync(string name);
     }
 }

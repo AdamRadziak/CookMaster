@@ -13,5 +13,13 @@ namespace CookMaster.Aplication.Mappings
             User user = mapper.Map<User>(dto);
             return user;
         }
+
+        public static Product MapProduct(this AddUpdateProductDTO dto)
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<AddUpdateProductDTO, Product>());
+            var mapper = new Mapper(config);
+            Product product = mapper.Map<Product>(dto);
+            return product;
+        }
     }
 }

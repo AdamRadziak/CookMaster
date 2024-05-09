@@ -15,12 +15,14 @@ namespace CookMaster.Persistence.UOW
         public IUserRepository UserRepository { get; private set; }
 
         public IProductRepository ProductRepository { get; private set; }
+
         public UnitOfWork(CookMasterDbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _repositories = new Hashtable();
 
             UserRepository = new UserRepository(_dbContext);
+            ProductRepository = new ProductRepository(_dbContext);
         }
 
         public IGenericRepository<T> Repository<T>() where T : class
