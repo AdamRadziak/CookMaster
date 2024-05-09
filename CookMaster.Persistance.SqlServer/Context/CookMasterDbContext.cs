@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using CookMaster.Persistance.SqlServer.Model;
+﻿using CookMaster.Persistance.SqlServer.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace CookMaster.Persistance.SqlServer.Context;

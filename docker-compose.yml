@@ -11,6 +11,7 @@ services:
   cookmaster_db:
     # Docker Image for MSSQL
     image: mcr.microsoft.com/mssql/server
+    container_name: cookmaster_db
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Your@Password

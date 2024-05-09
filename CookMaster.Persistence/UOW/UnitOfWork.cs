@@ -2,28 +2,27 @@
 using CookMaster.Persistence.Repositories;
 using CookMaster.Persistence.Repositories.Interfaces;
 using CookMaster.Persistence.UOW.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CookMaster.Persistence.UOW
 {
-    public class UnitOfWork: IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private CookMasterDbContext _dbContext;
-        private Hashtable _repositories;
+        private readonly CookMasterDbContext _dbContext;
+        private readonly Hashtable _repositories;
         private bool disposed;
 
-        public UnitOfWork(CookMasterDbContext dbContext) 
+        public IUserRepository UserRepository { get; private set; }
+
+        public IProductRepository ProductRepository { get; private set; }
+        public UnitOfWork(CookMasterDbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _repositories = new Hashtable();
 
+            UserRepository = new UserRepository(_dbContext);
         }
+
         public IGenericRepository<T> Repository<T>() where T : class
         {
             var type = typeof(T).Name;
@@ -75,11 +74,6 @@ namespace CookMaster.Persistence.UOW
             }
             //dispose unmanaged resources
             disposed = true;
-        }
-
-        IGenericRepository<T> IUnitOfWork.Repository<T>()
-        {
-            throw new NotImplementedException();
         }
     }
 }

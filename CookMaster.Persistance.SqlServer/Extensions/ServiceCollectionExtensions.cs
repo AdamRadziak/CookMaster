@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CookMaster.Persistance.SqlServer.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using CookMaster.Persistance.SqlServer.Context;
 
 namespace CookMaster.Persistance.SqlServer.Extensions
 {

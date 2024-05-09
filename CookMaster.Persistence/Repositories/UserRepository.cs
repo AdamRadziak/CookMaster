@@ -2,15 +2,10 @@
 using CookMaster.Persistance.SqlServer.Model;
 using CookMaster.Persistence.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CookMaster.Persistence.Repositories
 {
-    public class UserRepository: GenericRepository<User>, IUserRepository
+    public class UserRepository : GenericRepository<User>, IUserRepository
     {
         public UserRepository(CookMasterDbContext dbContext) : base(dbContext) { }
 
@@ -33,6 +28,11 @@ namespace CookMaster.Persistence.Repositories
         public async Task<bool> IsPasswordEditAllowedAsync(string password, int id)
         {
             return await Entities.AnyAsync(e => e.Password != password && e.Id == id);
+        }
+
+        public async Task<bool> IsEmailEditAllowedAsync(string email, int id)
+        {
+            return await Entities.AnyAsync(e => e.Email != email && e.Id == id);
         }
     }
 }

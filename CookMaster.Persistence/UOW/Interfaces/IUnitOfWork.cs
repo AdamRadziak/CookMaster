@@ -4,6 +4,7 @@ namespace CookMaster.Persistence.UOW.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
+        IUserRepository UserRepository { get; }
         IGenericRepository<T> Repository<T>() where T : class;
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

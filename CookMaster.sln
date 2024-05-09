@@ -9,7 +9,9 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookMaster.Persistance.SqlServer", "CookMaster.Persistance.SqlServer\CookMaster.Persistance.SqlServer.csproj", "{E03B0F43-F21C-4917-B6DC-2E6819EFB946}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookMaster.Persistence", "CookMaster.Persistence\CookMaster.Persistence.csproj", "{A6FFF4BA-CFC4-4DEB-948A-FF0C421F5A54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CookMaster.Persistence", "CookMaster.Persistence\CookMaster.Persistence.csproj", "{A6FFF4BA-CFC4-4DEB-948A-FF0C421F5A54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CookMaster.Aplication", "CookMaster.Aplication\CookMaster.Aplication.csproj", "{B7AD4B33-AA78-4FBE-AD5D-426954BCF995}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{A6FFF4BA-CFC4-4DEB-948A-FF0C421F5A54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6FFF4BA-CFC4-4DEB-948A-FF0C421F5A54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6FFF4BA-CFC4-4DEB-948A-FF0C421F5A54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7AD4B33-AA78-4FBE-AD5D-426954BCF995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7AD4B33-AA78-4FBE-AD5D-426954BCF995}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7AD4B33-AA78-4FBE-AD5D-426954BCF995}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7AD4B33-AA78-4FBE-AD5D-426954BCF995}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

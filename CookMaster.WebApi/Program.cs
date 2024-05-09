@@ -1,26 +1,42 @@
+using CookMaster.Aplication.Extensions;
+using CookMaster.Aplication.Services;
+using CookMaster.Aplication.Services.Interfaces;
+using CookMaster.Aplication.Utils;
 using CookMaster.Persistence.Extensions;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.OpenApi.Models;
 
-        var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddPersistenceLayer(builder.Configuration);
+// Add services to the container.
+builder.Services.AddPersistenceLayer(builder.Configuration);
+builder.Services.AddAplicationLayer(builder.Configuration);
 
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+// add authentication in swagger
+//builder.Services.AddAuthentication("BasicAuthentication")
+//.AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
 
-        var app = builder.Build();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+//builder.Services.AddScoped<IUserService, UserService>();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+var app = builder.Build();
 
-        app.UseAuthorization();
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-        app.MapControllers();
+//app.UseAuthentication();
+app.UseAuthorization();
 
-        app.Run();
+app.MapControllers();
+
+app.Run();

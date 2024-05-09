@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CookMaster.Persistance.SqlServer.Extensions;
+using CookMaster.Persistence.UOW.Interfaces;
+using CookMaster.Persistence.UOW;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using CookMaster.Persistance.SqlServer.Extensions;
 
 namespace CookMaster.Persistence.Extensions
 {
@@ -9,6 +11,7 @@ namespace CookMaster.Persistence.Extensions
         public static void AddPersistenceLayer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMsSqlDbContext(configuration);
+            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
         }
     }
 }

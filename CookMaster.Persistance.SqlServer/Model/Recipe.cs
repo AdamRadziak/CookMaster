@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CookMaster.Persistance.SqlServer.Model;
+﻿namespace CookMaster.Persistance.SqlServer.Model;
 
 public partial class Recipe
 {
