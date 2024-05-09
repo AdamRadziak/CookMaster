@@ -11,7 +11,7 @@ namespace CookMaster.WebApi.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/Users")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

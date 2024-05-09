@@ -26,13 +26,13 @@ namespace CookMaster.Aplication.Utils
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            string email = null;
+            string email=null;
             try
             {
                 var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
                 var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(authHeader.Parameter)).Split(':');
                 email = credentials.FirstOrDefault();
-                var password = credentials.LastOrDefault().ToString();
+                string password = credentials.LastOrDefault();
 
                 if (!_userService.VerifyPasswordByEmail(email, password).Result.IsSuccess)
                 {
@@ -41,7 +41,7 @@ namespace CookMaster.Aplication.Utils
             }
             catch (Exception ex)
             {
-                return AuthenticateResult.Fail($"Authentication failed: {ex.Message}");
+                return await Task.FromResult(AuthenticateResult.Fail($"Authentication failed: {ex.Message}"));
             }
 
             var claims = new[] {
@@ -51,8 +51,9 @@ namespace CookMaster.Aplication.Utils
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, Scheme.Name);
 
-            return AuthenticateResult.Success(ticket);
+            return await Task.FromResult(AuthenticateResult.Success(ticket));
         }
+
 
     }
 }

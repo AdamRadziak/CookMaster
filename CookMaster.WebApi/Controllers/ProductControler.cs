@@ -13,7 +13,7 @@ namespace CookMaster.WebApi.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/Products")]
     public class ProductControler : ControllerBase
     {
         private readonly IProductService _service;
