@@ -1,4 +1,7 @@
-﻿namespace CookMaster.Persistance.SqlServer.Model;
+﻿using System;
+using System.Collections.Generic;
+
+namespace CookMaster.Persistance.SqlServer.Model;
 
 public partial class Product
 {
@@ -9,6 +12,4 @@ public partial class Product
     public string? Category { get; set; }
 
     public string? Amount { get; set; }
-
-    public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
 }

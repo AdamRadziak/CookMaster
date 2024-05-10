@@ -9,7 +9,6 @@ namespace CookMaster.Aplication.DTOs
     public class AddUpdateStepDTO
     {
         public string Description { get; set; } = null;
-        public int RecipeId { get; set; }
 
         public bool isUpdated { get; set; } = true;
 

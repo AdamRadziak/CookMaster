@@ -30,6 +30,14 @@ namespace CookMaster.Aplication.Mappings
             return dto;
         }
 
+        public static GetSinglePhotoDTO MapGetSinglePhotoDTO(this Photo domainPhoto)
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<Photo, GetSinglePhotoDTO>());
+            var mapper = new Mapper(config);
+            GetSinglePhotoDTO dto = mapper.Map<GetSinglePhotoDTO>(domainPhoto);
+            return dto;
+        }
+
 
     }
 }

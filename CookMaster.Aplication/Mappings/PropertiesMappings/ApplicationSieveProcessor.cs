@@ -17,7 +17,10 @@ namespace CookMaster.Aplication.Mappings.PropertiesMappings
         protected override SievePropertyMapper MapProperties(SievePropertyMapper mapper)
         {
             // create mapper instance of SievePropertyMapper
-            var map = mapper.ApplyConfiguration<SieveConfigurationForUser>();
+            var map = mapper.ApplyConfiguration<SieveConfigurationForUser>()
+                .ApplyConfiguration<SieveConfigurationForProducts>()
+                .ApplyConfiguration<SieveConfigurationForStep>()
+                .ApplyConfiguration<SieveConfigurationForPhotos>();
 
             return map;
         }

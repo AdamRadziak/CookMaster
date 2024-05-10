@@ -9,6 +9,8 @@ namespace CookMaster.Persistence.UOW.Interfaces
         IProductRepository ProductRepository { get; }
 
         IStepRepository StepRepository { get; }
+
+        IPhotoRepository PhotoRepository { get; }
         IGenericRepository<T> Repository<T>() where T : class;
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

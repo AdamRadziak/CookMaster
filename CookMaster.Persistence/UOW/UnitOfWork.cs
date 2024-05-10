@@ -18,6 +18,8 @@ namespace CookMaster.Persistence.UOW
 
         public IStepRepository StepRepository { get; private set; }
 
+        public IPhotoRepository PhotoRepository { get; private set; }
+
         public UnitOfWork(CookMasterDbContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
@@ -26,6 +28,7 @@ namespace CookMaster.Persistence.UOW
             UserRepository = new UserRepository(_dbContext);
             ProductRepository = new ProductRepository(_dbContext);
             StepRepository = new StepRepository(_dbContext);
+            PhotoRepository = new PhotoRepository(_dbContext);
         }
 
         public IGenericRepository<T> Repository<T>() where T : class

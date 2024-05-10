@@ -1,4 +1,7 @@
-﻿namespace CookMaster.Persistance.SqlServer.Model;
+﻿using System;
+using System.Collections.Generic;
+
+namespace CookMaster.Persistance.SqlServer.Model;
 
 public partial class Photo
 {
@@ -8,5 +11,5 @@ public partial class Photo
 
     public byte[]? Data { get; set; }
 
-    public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
+    public string? FilePath { get; set; }
 }

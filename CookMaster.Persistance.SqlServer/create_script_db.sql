@@ -8,36 +8,14 @@ GO
 USE CookMasterDB
 GO
 
-/****** Object:  Table [dbo].[Users]    Script Date: 29.04.2024 14:21:52 ******/
+
+/****** Object:  Table [dbo].[Recipes]    Script Date: 10.05.2024 12:57:24 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[Users](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Email] [nvarchar](50) NULL,
-	[Password] [nvarchar](50) NULL,
-	[IdMenu] [int] NULL,
- CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-
-CREATE TABLE [dbo].[UserMenu](
-	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Name] [nvarchar](50) NULL,
-	[RecipeCategory] [nvarchar](50) NULL,
-	[IdMenuRecipe] [int] NULL,
- CONSTRAINT [PK_UserMenu] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
-GO
 CREATE TABLE [dbo].[Recipes](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NULL,
@@ -45,26 +23,48 @@ CREATE TABLE [dbo].[Recipes](
 	[MealCount] [int] NULL,
 	[Rate] [float] NULL,
 	[Popularity] [float] NULL,
-	[Description] [nvarchar](50) NULL,
-	[IdFavourite] [int] NULL,
-	[IdStepsRecipe] [int] NULL,
-	[IdProductRecipe] [int] NULL,
-	[IdPhoto] [int] NULL,
+	[Description] [nvarchar](100) NULL,
  CONSTRAINT [PK_Recipes] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-CREATE TABLE [dbo].[Steps](
+
+
+/****** Object:  Table [dbo].[Users]    Script Date: 10.05.2024 12:59:05 ******/
+
+
+CREATE TABLE [dbo].[Users](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Description] [nvarchar](max) NULL,
- CONSTRAINT [PK_Steps] PRIMARY KEY CLUSTERED 
+	[Email] [nvarchar](50) NULL,
+	[Password] [nvarchar](50) NULL,
+ CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 GO
+
+
+/****** Object:  Table [dbo].[UserMenu]    Script Date: 10.05.2024 12:59:43 ******/
+
+
+CREATE TABLE [dbo].[UserMenu](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NULL,
+	[RecipeCategory] [nvarchar](50) NULL,
+ CONSTRAINT [PK_UserMenu] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+
+/****** Object:  Table [dbo].[Products]    Script Date: 10.05.2024 13:00:16 ******/
+
+
 CREATE TABLE [dbo].[Products](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [nvarchar](50) NULL,
@@ -76,10 +76,28 @@ CREATE TABLE [dbo].[Products](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
+
+/****** Object:  Table [dbo].[Steps]    Script Date: 10.05.2024 13:01:14 ******/
+
+CREATE TABLE [dbo].[Steps](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Description] [nvarchar](max) NULL,
+ CONSTRAINT [PK_Steps] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+/****** Object:  Table [dbo].[Photos]    Script Date: 10.05.2024 13:01:52 ******/
+
+
 CREATE TABLE [dbo].[Photos](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[FileName] [nvarchar](50) NULL,
 	[Data] [varbinary](max) NULL,
+	[FilePath] [nvarchar](120) NULL,
  CONSTRAINT [PK_Photos] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -87,50 +105,78 @@ CREATE TABLE [dbo].[Photos](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[Users]  WITH CHECK ADD  CONSTRAINT [FK_Users_UserMenu] FOREIGN KEY([IdMenu])
-REFERENCES [dbo].[UserMenu] ([Id])
+
+/****** Object:  Table [dbo].[RecipesDetails]    Script Date: 10.05.2024 13:03:10 ******/
+
+
+CREATE TABLE [dbo].[RecipesDetails](
+	[IdRecipe] [int] NULL,
+	[IdStep] [int] NULL,
+	[IdProduct] [int] NULL,
+	[IdPhoto] [int] NULL
+) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[Users] CHECK CONSTRAINT [FK_Users_UserMenu]
-GO
--- table userMenu
-
-
-
-ALTER TABLE [dbo].[UserMenu]  WITH CHECK ADD  CONSTRAINT [FK_UserMenu_Recipes] FOREIGN KEY([IdMenuRecipe])
-REFERENCES [dbo].[Recipes] ([Id])
-GO
-
-ALTER TABLE [dbo].[UserMenu] CHECK CONSTRAINT [FK_UserMenu_Recipes]
-GO
-
-ALTER TABLE [dbo].[Recipes]  WITH CHECK ADD  CONSTRAINT [FK_Recipes_Photos] FOREIGN KEY([IdPhoto])
+ALTER TABLE [dbo].[RecipesDetails]  WITH CHECK ADD  CONSTRAINT [FK_RecipesDetails_Photos] FOREIGN KEY([IdPhoto])
 REFERENCES [dbo].[Photos] ([Id])
 GO
 
-ALTER TABLE [dbo].[Recipes] CHECK CONSTRAINT [FK_Recipes_Photos]
+ALTER TABLE [dbo].[RecipesDetails] CHECK CONSTRAINT [FK_RecipesDetails_Photos]
 GO
 
-ALTER TABLE [dbo].[Recipes]  WITH CHECK ADD  CONSTRAINT [FK_Recipes_Products] FOREIGN KEY([IdProductRecipe])
+ALTER TABLE [dbo].[RecipesDetails]  WITH CHECK ADD  CONSTRAINT [FK_RecipesDetails_Products] FOREIGN KEY([IdProduct])
 REFERENCES [dbo].[Products] ([Id])
 GO
 
-ALTER TABLE [dbo].[Recipes] CHECK CONSTRAINT [FK_Recipes_Products]
+ALTER TABLE [dbo].[RecipesDetails] CHECK CONSTRAINT [FK_RecipesDetails_Products]
 GO
 
-ALTER TABLE [dbo].[Recipes]  WITH CHECK ADD  CONSTRAINT [FK_Recipes_Steps] FOREIGN KEY([IdStepsRecipe])
+ALTER TABLE [dbo].[RecipesDetails]  WITH CHECK ADD  CONSTRAINT [FK_RecipesDetails_Recipes] FOREIGN KEY([IdRecipe])
+REFERENCES [dbo].[Recipes] ([Id])
+GO
+
+ALTER TABLE [dbo].[RecipesDetails] CHECK CONSTRAINT [FK_RecipesDetails_Recipes]
+GO
+
+ALTER TABLE [dbo].[RecipesDetails]  WITH CHECK ADD  CONSTRAINT [FK_RecipesDetails_Steps] FOREIGN KEY([IdStep])
 REFERENCES [dbo].[Steps] ([Id])
 GO
 
-ALTER TABLE [dbo].[Recipes] CHECK CONSTRAINT [FK_Recipes_Steps]
+ALTER TABLE [dbo].[RecipesDetails] CHECK CONSTRAINT [FK_RecipesDetails_Steps]
 GO
 
-ALTER TABLE [dbo].[Recipes]  WITH CHECK ADD  CONSTRAINT [FK_Recipes_Users] FOREIGN KEY([IdFavourite])
+/****** Object:  Table [dbo].[UserMenuRecipes]    Script Date: 10.05.2024 13:03:50 ******/
+
+
+CREATE TABLE [dbo].[UserMenuRecipes](
+	[IdUser] [int] NULL,
+	[IdUserMenu] [int] NULL,
+	[IdRecipe] [int] NULL
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[UserMenuRecipes]  WITH CHECK ADD  CONSTRAINT [FK_UserMenuRecipes_Recipes] FOREIGN KEY([IdRecipe])
+REFERENCES [dbo].[Recipes] ([Id])
+GO
+
+ALTER TABLE [dbo].[UserMenuRecipes] CHECK CONSTRAINT [FK_UserMenuRecipes_Recipes]
+GO
+
+ALTER TABLE [dbo].[UserMenuRecipes]  WITH CHECK ADD  CONSTRAINT [FK_UserMenuRecipes_UserMenu] FOREIGN KEY([IdUserMenu])
+REFERENCES [dbo].[UserMenu] ([Id])
+GO
+
+ALTER TABLE [dbo].[UserMenuRecipes] CHECK CONSTRAINT [FK_UserMenuRecipes_UserMenu]
+GO
+
+ALTER TABLE [dbo].[UserMenuRecipes]  WITH CHECK ADD  CONSTRAINT [FK_UserMenuRecipes_Users] FOREIGN KEY([IdUser])
 REFERENCES [dbo].[Users] ([Id])
 GO
 
-ALTER TABLE [dbo].[Recipes] CHECK CONSTRAINT [FK_Recipes_Users]
+ALTER TABLE [dbo].[UserMenuRecipes] CHECK CONSTRAINT [FK_UserMenuRecipes_Users]
 GO
+
+
 
 
 

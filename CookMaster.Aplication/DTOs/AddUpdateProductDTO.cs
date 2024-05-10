@@ -11,7 +11,6 @@ namespace CookMaster.Aplication.DTOs
         public string Name { get; set; } = null!;
         public string Category {  get; set; } = null!;
         public string Amount { get; set; } = null!;
-        public int RecipeId { get; set; } = 0;
         public bool IsUpdated { get; set; } = true;
 
     }

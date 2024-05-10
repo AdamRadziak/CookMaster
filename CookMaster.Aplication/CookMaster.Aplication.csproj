@@ -18,4 +18,8 @@
     <ProjectReference Include="..\CookMaster.Persistence\CookMaster.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UserFiles\" />
+  </ItemGroup>
+
 </Project>
