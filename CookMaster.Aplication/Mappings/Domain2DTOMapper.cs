@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CookMaster.Aplication.DTOs;
 using CookMaster.Persistance.SqlServer.Model;
+using System.Collections;
 
 namespace CookMaster.Aplication.Mappings
 {
@@ -35,6 +36,21 @@ namespace CookMaster.Aplication.Mappings
             var config = new MapperConfiguration(cfg => cfg.CreateMap<Photo, GetSinglePhotoDTO>());
             var mapper = new Mapper(config);
             GetSinglePhotoDTO dto = mapper.Map<GetSinglePhotoDTO>(domainPhoto);
+            return dto;
+        }
+
+        public static GetSingleRecipeDTO MapGetSingleRecipeDTO(this IList domainRecipe)
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Recipe, GetSingleRecipeDTO>();
+                cfg.CreateMap<Step, GetSingleRecipeDTO>();
+                cfg.CreateMap<Product, GetSingleRecipeDTO>();
+                cfg.CreateMap<Photo, GetSingleRecipeDTO>();
+
+            });
+            var mapper = new Mapper(config);
+            GetSingleRecipeDTO dto = mapper.Map<GetSingleRecipeDTO>(domainRecipe);
             return dto;
         }
 

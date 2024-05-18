@@ -1,6 +1,13 @@
-﻿namespace CookMaster.Persistence.Repositories.Interfaces
+﻿using CookMaster.Persistance.SqlServer.Model;
+using System.Collections;
+
+namespace CookMaster.Persistence.Repositories.Interfaces
 {
-    internal interface IRecipeRepository
+    public interface IRecipeRepository : IGenericRepository<RecipesDetail>
     {
+        Task<bool> RecipeEditAllowedAsync(string name);
+
+        Task<IList?> GetByNameAsync(string name);
+
     }
 }

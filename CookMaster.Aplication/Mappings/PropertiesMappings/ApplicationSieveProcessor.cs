@@ -20,7 +20,8 @@ namespace CookMaster.Aplication.Mappings.PropertiesMappings
             var map = mapper.ApplyConfiguration<SieveConfigurationForUser>()
                 .ApplyConfiguration<SieveConfigurationForProducts>()
                 .ApplyConfiguration<SieveConfigurationForStep>()
-                .ApplyConfiguration<SieveConfigurationForPhotos>();
+                .ApplyConfiguration<SieveConfigurationForPhotos>()
+                .ApplyConfiguration<SieveConfigurationForRecipes>();
 
             return map;
         }

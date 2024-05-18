@@ -12,6 +12,7 @@ namespace CookMaster.Persistence.UOW
         private readonly Hashtable _repositories;
         private bool disposed;
 
+        public IRecipeRepository RecipeRepository { get; private set; }
         public IUserRepository UserRepository { get; private set; }
 
         public IProductRepository ProductRepository { get; private set; }
@@ -29,6 +30,7 @@ namespace CookMaster.Persistence.UOW
             ProductRepository = new ProductRepository(_dbContext);
             StepRepository = new StepRepository(_dbContext);
             PhotoRepository = new PhotoRepository(_dbContext);
+            RecipeRepository = new RecipeRepository(_dbContext);
         }
 
         public IGenericRepository<T> Repository<T>() where T : class

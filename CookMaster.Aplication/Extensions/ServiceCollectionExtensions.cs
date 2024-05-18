@@ -28,7 +28,8 @@ namespace CookMaster.Aplication.Extensions
                 .AddScoped(typeof(IUserService), typeof(UserService))
                 .AddScoped(typeof(IProductService), typeof(ProductService))
                 .AddScoped(typeof(IStepService), typeof(StepService))
-                .AddScoped(typeof(IPhotoService), typeof(PhotoService));
+                .AddScoped(typeof(IPhotoService), typeof(PhotoService))
+                .AddScoped(typeof(IRecipeService),typeof(RecipeService));
 
             services.AddScoped<IValidator<AddUpdateUserDTO>, AddUpdateUserDTOValidator>();
             // services.AddScoped<IValidator<AddUpdateProductDTO>, AddUpdateProductDTOValidator>();
