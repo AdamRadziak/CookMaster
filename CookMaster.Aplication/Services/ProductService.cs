@@ -32,6 +32,11 @@ namespace CookMaster.Aplication.Services
                     return (false, default(Product), HttpStatusCode.BadRequest, "Product name: " + dto.Name + " already exist in the database");
                 }
 
+                if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
+                {
+                    return (false, default(Product), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
+                }
+
                 var newEntity = dto.MapProduct();
 
                 var result = await AddAndSaveAsync(newEntity);
@@ -54,9 +59,14 @@ namespace CookMaster.Aplication.Services
                     return existingEntityResult;
                 }
 
-                if (!await _unitOfWork.ProductRepository.ProductEditAllowedAsync(dto.Name))
+                if (await _unitOfWork.ProductRepository.ProductEditAllowedAsync(dto.Name))
                 {
-                    return (false, default(Product), HttpStatusCode.BadRequest, "Product name: " + dto.Name + " not exist in the database");
+                    return (false, default(Product), HttpStatusCode.BadRequest, "Product name: " + dto.Name + " already exist in the database");
+                }
+
+                if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
+                {
+                    return (false, default(Product), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
                 }
 
                 var domainEntity = dto.MapProduct();

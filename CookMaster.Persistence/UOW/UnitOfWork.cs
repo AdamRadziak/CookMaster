@@ -12,7 +12,6 @@ namespace CookMaster.Persistence.UOW
         private readonly Hashtable _repositories;
         private bool disposed;
 
-        public IRecipeRepository RecipeRepository { get; private set; }
         public IUserRepository UserRepository { get; private set; }
 
         public IProductRepository ProductRepository { get; private set; }
@@ -20,6 +19,7 @@ namespace CookMaster.Persistence.UOW
         public IStepRepository StepRepository { get; private set; }
 
         public IPhotoRepository PhotoRepository { get; private set; }
+        public IRecipeRepository RecipeRepository { get; private set; }
 
         public UnitOfWork(CookMasterDbContext dbContext)
         {

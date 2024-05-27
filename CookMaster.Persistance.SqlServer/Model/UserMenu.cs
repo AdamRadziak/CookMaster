@@ -7,7 +7,13 @@ public partial class UserMenu
 {
     public int Id { get; set; }
 
+    public int? IdUser { get; set; }
+
     public string? Name { get; set; }
 
     public string? RecipeCategory { get; set; }
+
+    public virtual User? IdUserNavigation { get; set; }
+
+    public virtual ICollection<Recipe> Recipes { get; set; } = new List<Recipe>();
 }

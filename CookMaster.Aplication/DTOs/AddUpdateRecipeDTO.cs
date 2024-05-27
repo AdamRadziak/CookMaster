@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CookMaster.Persistance.SqlServer.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,6 @@ namespace CookMaster.Aplication.DTOs
         public double Rate { get; set; } = 0.0!;
         public double Popularity { get; set; } = 0.0!;
         public string Description { get; set; } = null!;
-        public string PhotoName { get; set; } = null!;
-
-        public string [] Steps {  get; set; } = null!;
-        public string[] ProductNames { get; set; } = null!;
-
-        public string[] ProductAmounts { get; set; } = null!;
 
         public bool IsRecipeUpdate { get; set; } = true;
 

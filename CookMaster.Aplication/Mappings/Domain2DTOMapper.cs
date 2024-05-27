@@ -39,19 +39,49 @@ namespace CookMaster.Aplication.Mappings
             return dto;
         }
 
-        public static GetSingleRecipeDTO MapGetSingleRecipeDTO(this IList domainRecipe)
+        public static GetSingleRecipeDTO MapGetSingleRecipeDTO(this Recipe domainRecipe)
         {
-            var config = new MapperConfiguration(cfg =>
+            if (domainRecipe == null)
             {
-                cfg.CreateMap<Recipe, GetSingleRecipeDTO>();
-                cfg.CreateMap<Step, GetSingleRecipeDTO>();
-                cfg.CreateMap<Product, GetSingleRecipeDTO>();
-                cfg.CreateMap<Photo, GetSingleRecipeDTO>();
-
+                throw new ArgumentNullException(nameof(domainRecipe));
+            }
+            //automapper for dto products, steps, photos
+            var config_prod = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Product, GetSingleProductDTO>();
             });
-            var mapper = new Mapper(config);
-            GetSingleRecipeDTO dto = mapper.Map<GetSingleRecipeDTO>(domainRecipe);
+            var mapper_prod = new Mapper(config_prod);
+            ICollection<GetSingleProductDTO> dtoProducts = mapper_prod.Map<ICollection<GetSingleProductDTO>>(domainRecipe.Products);
+            
+            var config_step = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Step, GetSingleStepDTO>();
+            });
+            var mapper_step = new Mapper(config_step);
+            ICollection <GetSingleStepDTO> dtoSteps = mapper_step.Map<ICollection<GetSingleStepDTO>>(domainRecipe.Steps);
+
+            var config_photo = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Photo, GetSinglePhotoDTO>();
+            });
+            var mapper_photo = new Mapper(config_step);
+            ICollection <GetSinglePhotoDTO> dtoPhotos = mapper_step.Map<ICollection<GetSinglePhotoDTO>>(domainRecipe.Photos);
+
+            GetSingleRecipeDTO dto = new()
+            {
+                Id = domainRecipe.Id,
+                Name = domainRecipe.Name,
+                IdUser = domainRecipe.IdUser,
+                IdMenu = domainRecipe.IdMenu,
+                PrepareTime = domainRecipe.PrepareTime,
+                MealCount = domainRecipe.MealCount,
+                Rate = domainRecipe.Rate,
+                Popularity = domainRecipe.Popularity,
+                Description = domainRecipe.Description,
+                Photos = dtoPhotos,
+                Products = dtoProducts,
+                Steps = dtoSteps,
+            };
             return dto;
+            
+            
         }
 
 

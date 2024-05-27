@@ -3,11 +3,13 @@ using System.Collections;
 
 namespace CookMaster.Persistence.Repositories.Interfaces
 {
-    public interface IRecipeRepository : IGenericRepository<RecipesDetail>
+    public interface IRecipeRepository : IGenericRepository<Recipe>
     {
-        Task<bool> RecipeEditAllowedAsync(string name);
+        Task<Recipe> GetByIdAsync(int id);
 
-        Task<IList?> GetByNameAsync(string name);
+        IQueryable<Recipe> GetAllAsync(int count);
+        Task<bool> RecipeExistAsync(int id);
+
 
     }
 }

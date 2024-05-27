@@ -32,6 +32,11 @@ namespace CookMaster.Aplication.Services
                 {
                     return (false, default(Photo), HttpStatusCode.BadRequest, "Photo filename: " + dto.FileName + " already exist in the database");
                 }
+
+                if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
+                {
+                    return (false, default(Photo), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
+                }
                 // convert photo to byte
                 dto.Data = PhotoTools.ConvertFromFile2Byte(dto.FilePath);
                 var newEntity = dto.MapPhoto();
@@ -54,6 +59,10 @@ namespace CookMaster.Aplication.Services
                 if (!existingEntityResult.IsSuccess)
                 {
                     return existingEntityResult;
+                }
+                if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
+                {
+                    return (false, default(Photo), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
                 }
                 // convert photo to byte
                 dto.Data = PhotoTools.ConvertFromFile2Byte(dto.FilePath);

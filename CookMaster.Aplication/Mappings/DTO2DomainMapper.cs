@@ -37,5 +37,13 @@ namespace CookMaster.Aplication.Mappings
             Photo photo = mapper.Map<Photo>(dto);
             return photo;
         }
+
+        public static Recipe MapRecipe(this AddUpdateRecipeDTO dto)
+        {
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<AddUpdateRecipeDTO, Recipe>());
+            var mapper = new Mapper(config);
+            Recipe recipe = mapper.Map<Recipe>(dto);
+            return recipe;
+        }
     }
 }

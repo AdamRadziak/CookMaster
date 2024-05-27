@@ -29,6 +29,10 @@ namespace CookMaster.Aplication.Services
         {
             try
             {
+                if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
+                {
+                    return (false, default(Step), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
+                }
 
                 var newEntity = dto.MapStep();
 
@@ -50,6 +54,11 @@ namespace CookMaster.Aplication.Services
                 if (!existingEntityResult.IsSuccess)
                 {
                     return existingEntityResult;
+                }
+
+                if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
+                {
+                    return (false, default(Step), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
                 }
 
 

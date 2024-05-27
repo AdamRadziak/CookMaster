@@ -12,7 +12,7 @@ namespace CookMaster.Persistence.Repositories
 
         public async Task<bool> ProductEditAllowedAsync(string name)
         {
-            return await Entities.AnyAsync(e => e.Name != name);
+            return await Entities.AnyAsync(e => e.Name == name);
         }
     }
 }

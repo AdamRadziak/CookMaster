@@ -30,5 +30,10 @@ namespace CookMaster.Persistence.Repositories
         {
             return await Entities.AnyAsync(e => e.Email != email && e.Id == id);
         }
+
+        public async Task<bool> IsUserExistAsync(int id)
+        {
+            return await Entities.AnyAsync(e => e.Id == id);
+        }
     }
 }

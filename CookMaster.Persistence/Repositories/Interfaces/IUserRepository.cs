@@ -9,5 +9,7 @@ namespace CookMaster.Persistence.Repositories.Interfaces
         Task<bool> IsPasswordEditAllowedAsync(string password, int id);
 
         Task<bool> IsEmailEditAllowedAsync(string email, int id);
+
+        Task<bool> IsUserExistAsync(int id);
     }
 }

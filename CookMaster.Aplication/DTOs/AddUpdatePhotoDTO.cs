@@ -8,6 +8,7 @@ namespace CookMaster.Aplication.DTOs
 {
     public class AddUpdatePhotoDTO
     {
+        public int IdRecipe { get; set; } = 0;
         public string FileName { get; set; } = null!;
         public byte[]? Data { get; set; } = null;
         public string FilePath { get; set; } = null!;
