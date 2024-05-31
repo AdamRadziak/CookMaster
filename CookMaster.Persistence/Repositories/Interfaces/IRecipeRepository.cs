@@ -10,6 +10,8 @@ namespace CookMaster.Persistence.Repositories.Interfaces
         IQueryable<Recipe> GetAllAsync(int count);
         Task<bool> RecipeExistAsync(int id);
 
+        IQueryable<Recipe> GetFavouritiesByUser(string email);
+
 
     }
 }

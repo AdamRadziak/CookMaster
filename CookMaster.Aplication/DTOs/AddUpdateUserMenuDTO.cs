@@ -8,7 +8,13 @@ namespace CookMaster.Aplication.DTOs
 {
     public class AddUpdateUserMenuDTO
     {
-        public string Id { get; set; }
+        public string Name { get; set; }
+        public string UserEmail { get; set; } = null!;
+        public string RecipeDescription { get; set; } = null!;
+        public ICollection<GetSingleRecipeDTO> Recipes { get; set; } = null!;
+
+
+
 
     }
 }

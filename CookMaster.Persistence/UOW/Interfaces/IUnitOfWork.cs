@@ -4,6 +4,7 @@ namespace CookMaster.Persistence.UOW.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
+        IUserMenuRepository UserMenuRepository { get; }
         IRecipeRepository RecipeRepository { get; }
         IUserRepository UserRepository { get; }
 

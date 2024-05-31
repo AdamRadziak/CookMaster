@@ -84,11 +84,11 @@ namespace CookMaster.WebApi.Controllers
             return StatusCode((int)result.StatusCode, result.entity.MapGetSingleRecipeDTO());
         }
 
-        [HttpPut("update/Recipes/{IdRecipe}/Users/{IdUser}")]
+        [HttpPost("AddFavourite/{IdRecipe}/ForUser/{Email}")]
         [SwaggerOperation(OperationId = "AddToFavouritites")]
-        public async Task<ActionResult<GetSingleRecipeDTO>> AddRecipe2Favouritites(int IdRecipe,int IdUser)
+        public async Task<ActionResult<GetSingleRecipeDTO>> AddRecipe2Favouritites(int IdRecipe,string Email)
         {
-            var result = await _service.AddRecipe2FavouritesAsync(IdRecipe, IdUser);
+            var result = await _service.AddRecipe2FavouritesAsync(IdRecipe, Email);
 
             if (!result.IsSuccess)
             {
@@ -96,6 +96,20 @@ namespace CookMaster.WebApi.Controllers
             }
 
             return StatusCode((int)result.StatusCode, result.entity.MapGetSingleRecipeDTO());
+        }
+
+        [HttpGet("list/GetFavourities/ForUser/{Email}")]
+        [SwaggerOperation(OperationId = "GetFavourities")]
+        public async Task<ActionResult<IPagedList<GetSingleRecipeDTO>>> GetFavouritites([FromQuery] SieveModel paginationParams, string Email)
+        {
+            var result = await _service.GetFavouritesAsync<GetSingleRecipeDTO>(Email,paginationParams);
+
+            if (!result.IsSuccess)
+            {
+                return Problem(statusCode: (int)result.StatusCode, title: "Read error.", detail: result.ErrorMessage);
+            }
+
+            return Ok(result.entityList);
         }
 
         [HttpDelete("{id}")]

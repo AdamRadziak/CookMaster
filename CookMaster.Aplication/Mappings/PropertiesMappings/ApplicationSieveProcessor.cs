@@ -18,10 +18,11 @@ namespace CookMaster.Aplication.Mappings.PropertiesMappings
         {
             // create mapper instance of SievePropertyMapper
             var map = mapper.ApplyConfiguration<SieveConfigurationForUser>()
-                .ApplyConfiguration<SieveConfigurationForProducts>()
-                .ApplyConfiguration<SieveConfigurationForStep>()
-                .ApplyConfiguration<SieveConfigurationForPhotos>()
-                .ApplyConfiguration<SieveConfigurationForRecipes>();
+                            .ApplyConfiguration<SieveConfigurationForProducts>()
+                            .ApplyConfiguration<SieveConfigurationForStep>()
+                            .ApplyConfiguration<SieveConfigurationForPhotos>()
+                            .ApplyConfiguration<SieveConfigurationForRecipes>()
+                            .ApplyConfiguration<SieveConfigurationForUserMenu>();
 
             return map;
         }

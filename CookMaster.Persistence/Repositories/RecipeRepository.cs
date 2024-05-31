@@ -35,6 +35,14 @@ namespace CookMaster.Persistence.Repositories
             return query;
         }
 
+        public  IQueryable<Recipe> GetFavouritiesByUser(string email)
+        {
+            var query =  Entities.Include(e => e.Photos)
+                                       .Include(e => e.Products)
+                                       .Include(e => e.Steps)
+                                       .Where(e => e.IdUserNavigation.Email == email).AsQueryable();
+            return query;
+        }
 
         public async Task<bool> RecipeExistAsync(int id)
         {

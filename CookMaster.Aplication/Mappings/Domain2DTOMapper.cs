@@ -46,23 +46,26 @@ namespace CookMaster.Aplication.Mappings
                 throw new ArgumentNullException(nameof(domainRecipe));
             }
             //automapper for dto products, steps, photos
-            var config_prod = new MapperConfiguration(cfg => {
+            var config_prod = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<Product, GetSingleProductDTO>();
             });
             var mapper_prod = new Mapper(config_prod);
             ICollection<GetSingleProductDTO> dtoProducts = mapper_prod.Map<ICollection<GetSingleProductDTO>>(domainRecipe.Products);
-            
-            var config_step = new MapperConfiguration(cfg => {
+
+            var config_step = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<Step, GetSingleStepDTO>();
             });
             var mapper_step = new Mapper(config_step);
-            ICollection <GetSingleStepDTO> dtoSteps = mapper_step.Map<ICollection<GetSingleStepDTO>>(domainRecipe.Steps);
+            ICollection<GetSingleStepDTO> dtoSteps = mapper_step.Map<ICollection<GetSingleStepDTO>>(domainRecipe.Steps);
 
-            var config_photo = new MapperConfiguration(cfg => {
+            var config_photo = new MapperConfiguration(cfg =>
+            {
                 cfg.CreateMap<Photo, GetSinglePhotoDTO>();
             });
             var mapper_photo = new Mapper(config_step);
-            ICollection <GetSinglePhotoDTO> dtoPhotos = mapper_step.Map<ICollection<GetSinglePhotoDTO>>(domainRecipe.Photos);
+            ICollection<GetSinglePhotoDTO> dtoPhotos = mapper_step.Map<ICollection<GetSinglePhotoDTO>>(domainRecipe.Photos);
 
             GetSingleRecipeDTO dto = new()
             {
@@ -80,10 +83,37 @@ namespace CookMaster.Aplication.Mappings
                 Steps = dtoSteps,
             };
             return dto;
-            
-            
+
+
         }
 
+        public static GetSingleUserMenuDTO MapGetSingleUserMenuDTO(this UserMenu domainUserMenu)
+        {
+            if (domainUserMenu == null)
+            {
+                throw new ArgumentNullException(nameof(domainUserMenu));
+            }
+            //automapper for dto products, steps, photos
+            var config_recipe = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Recipe, GetSingleRecipeDTO>();
+            });
+            var mapper_recipe = new Mapper(config_recipe);
+            ICollection<GetSingleRecipeDTO> dtoRecipes = mapper_recipe.Map<ICollection<GetSingleRecipeDTO>>(domainUserMenu.Recipes);
 
+            GetSingleUserMenuDTO dto = new()
+            {
+                Id = domainUserMenu.Id,
+                Name = domainUserMenu.Name,
+                UserEmail = domainUserMenu.IdUserNavigation.Email,
+                RecipeCategory = domainUserMenu.RecipeCategory,
+                Recipes = dtoRecipes,
+            };
+            return dto;
+
+
+
+
+        }
     }
 }

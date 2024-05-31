@@ -10,13 +10,9 @@ namespace CookMaster.Aplication.DTOs
     {
         public int Id { get; set; }
         public string UserEmail { get; set; } = null!;
-        public string Name { get; set; }
-        public string Recipe { get; set;} = null!;
-        public string RecipePrepareTime { get; set; } = null!;
-        public string RecipeMealCount { get; set; } = null!;    
-        public string RecipeRate { get; set; } = null!;  
-        public string RecipePopularity {  get; set; } = null!;
-        public string RecipeDescription { get; set; } = null!;
+        public string Name { get; set; } = null!;
+        public string RecipeCategory { get; set; } = null!;
+        public ICollection<GetSingleRecipeDTO> Recipes { get; set; } = null!;
 
 
     }

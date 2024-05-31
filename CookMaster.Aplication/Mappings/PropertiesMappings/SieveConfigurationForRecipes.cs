@@ -20,6 +20,26 @@ namespace CookMaster.Aplication.Mappings.PropertiesMappings
                 .CanSort()
                 .CanFilter();
 
+            mapper.Property<Recipe>(p => p.Popularity)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Recipe>(p => p.Rate)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Recipe>(p => p.MealCount)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Recipe>(p => p.PrepareTime)
+                .CanSort()
+                .CanFilter();
+
+            mapper.Property<Recipe>(p => p.Products)
+                .CanSort()
+                .CanFilter();
+
         }
     }
 }
