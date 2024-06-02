@@ -64,13 +64,14 @@ namespace CookMaster.Aplication.Mappings
             {
                 cfg.CreateMap<Photo, GetSinglePhotoDTO>();
             });
-            var mapper_photo = new Mapper(config_step);
-            ICollection<GetSinglePhotoDTO> dtoPhotos = mapper_step.Map<ICollection<GetSinglePhotoDTO>>(domainRecipe.Photos);
+            var mapper_photo = new Mapper(config_photo);
+            ICollection<GetSinglePhotoDTO> dtoPhotos = mapper_photo.Map<ICollection<GetSinglePhotoDTO>>(domainRecipe.Photos);
 
             GetSingleRecipeDTO dto = new()
             {
                 Id = domainRecipe.Id,
                 Name = domainRecipe.Name,
+                Category = domainRecipe.Category,
                 IdUser = domainRecipe.IdUser,
                 IdMenu = domainRecipe.IdMenu,
                 PrepareTime = domainRecipe.PrepareTime,
@@ -105,8 +106,8 @@ namespace CookMaster.Aplication.Mappings
             {
                 Id = domainUserMenu.Id,
                 Name = domainUserMenu.Name,
-                UserEmail = domainUserMenu.IdUserNavigation.Email,
-                RecipeCategory = domainUserMenu.RecipeCategory,
+                IdUser = domainUserMenu.IdUser,
+                Category = domainUserMenu.Category,
                 Recipes = dtoRecipes,
             };
             return dto;

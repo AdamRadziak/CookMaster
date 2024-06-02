@@ -25,6 +25,9 @@ namespace CookMaster.Aplication.Services
 {
     public class RecipeService : BaseService<Recipe>, IRecipeService
     {
+        IProductService _productService;
+        IPhotoService _photoService;
+        IStepService _StepService;
         public RecipeService(ILogger<Recipe> logger, ISieveProcessor sieveProcessor, IOptions<SieveOptions> sieveOptions, IUnitOfWork unitOfWork) : base(logger, sieveProcessor, sieveOptions, unitOfWork)
         {
         }
@@ -35,7 +38,7 @@ namespace CookMaster.Aplication.Services
             {
 
                 var newEntity = dto.MapRecipe();
-   
+
 
                 var result = await AddAndSaveAsync(newEntity);
                 return (true, result.entity, HttpStatusCode.OK, string.Empty);
@@ -97,9 +100,9 @@ namespace CookMaster.Aplication.Services
         {
             try
             {
-                var query = _unitOfWork.RecipeRepository.GetAllAsync(50) ;
+                var query = _unitOfWork.RecipeRepository.GetAllAsync(50);
 
-                var result = await query.ToPagedListAsync(_sieveProcessor,_sieveOptions,paginationParams, resultEntity => Domain2DTOMapper.MapGetSingleRecipeDTO(resultEntity));
+                var result = await query.ToPagedListAsync(_sieveProcessor, _sieveOptions, paginationParams, resultEntity => Domain2DTOMapper.MapGetSingleRecipeDTO(resultEntity));
 
                 return (true, result, HttpStatusCode.OK, String.Empty);
             }
@@ -151,7 +154,7 @@ namespace CookMaster.Aplication.Services
                 {
                     return (false, default(IPagedList<GetSingleRecipeDTO>), HttpStatusCode.BadRequest, "User Email" + UserEmail + "not exist in the database");
                 }
-                var query =  _unitOfWork.RecipeRepository.GetFavouritiesByUser(UserEmail);
+                var query = _unitOfWork.RecipeRepository.GetFavouritiesByUser(UserEmail);
                 var result = await query.ToPagedListAsync(_sieveProcessor, _sieveOptions, paginationParams, resultEntity => Domain2DTOMapper.MapGetSingleRecipeDTO(resultEntity));
                 // if query return null
                 if (query.Equals(null))
@@ -173,6 +176,26 @@ namespace CookMaster.Aplication.Services
 
         }
 
-       
+        public async  Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteRecipe(int Id)
+        {
+            
+            // add null to foreign key in receipe
+            var recipe = _unitOfWork.RecipeRepository.GetByIdAsync(Id);
+            recipe.Result.IdMenu = null;
+            recipe.Result.IdUser = null;
+            var resultUpdate = UpdateAndSaveAsync(recipe.Result, Id);
+            // delete and save async recipe
+            if (resultUpdate.Result.IsSuccess)
+            {
+                return await DeleteAndSaveAsync(Id);
+            }
+            else
+            {
+                return (false, default(Recipe), HttpStatusCode.BadRequest, "Delete error");
+            }
+
+
+                
+        }
     }
 }

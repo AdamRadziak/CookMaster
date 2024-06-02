@@ -14,5 +14,7 @@ namespace CookMaster.Aplication.Services.Interfaces
         Task<(bool IsSuccess, Photo? entity, HttpStatusCode StatusCode, string ErrorMessage)> CreateNewPhotoAsync(AddUpdatePhotoDTO dto);
 
         Task<(bool IsSuccess, Photo? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdatePhotoAsync(AddUpdatePhotoDTO dto, int id);
+
+        Task<(bool IsSuccess, Photo? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachPhotosFromRecipeAsync(int IdRecipe);
     }
 }

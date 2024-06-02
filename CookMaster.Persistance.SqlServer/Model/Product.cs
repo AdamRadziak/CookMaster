@@ -13,7 +13,9 @@ public partial class Product
 
     public string? Category { get; set; }
 
-    public string? Amount { get; set; }
+    public double? Amount { get; set; }
+
+    public string? Unit { get; set; }
 
     public virtual Recipe? IdRecipeNavigation { get; set; }
 }

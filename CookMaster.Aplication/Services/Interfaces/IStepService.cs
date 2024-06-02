@@ -14,5 +14,7 @@ namespace CookMaster.Aplication.Services.Interfaces
         Task<(bool IsSuccess, Step? entity, HttpStatusCode StatusCode, string ErrorMessage)> CreateNewStepAsync(AddUpdateStepDTO dto);
 
         Task<(bool IsSuccess, Step? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateStepAsync(AddUpdateStepDTO dto, int id);
+
+        Task<(bool IsSuccess, Step? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachStepsFromRecipeAsync(int IdRecipe);
     }
 }

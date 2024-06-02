@@ -9,9 +9,9 @@ namespace CookMaster.Aplication.DTOs
     public class GetSingleUserMenuDTO
     {
         public int Id { get; set; }
-        public string UserEmail { get; set; } = null!;
+        public int? IdUser { get; set; } = 0!;
         public string Name { get; set; } = null!;
-        public string RecipeCategory { get; set; } = null!;
+        public string Category { get; set; } = null!;
         public ICollection<GetSingleRecipeDTO> Recipes { get; set; } = null!;
 
 

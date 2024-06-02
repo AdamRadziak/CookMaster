@@ -27,10 +27,6 @@ namespace CookMaster.Aplication.Services
         {
             try
             {
-                if (await _unitOfWork.ProductRepository.ProductEditAllowedAsync(dto.Name))
-                {
-                    return (false, default(Product), HttpStatusCode.BadRequest, "Product name: " + dto.Name + " already exist in the database");
-                }
 
                 if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
                 {
@@ -48,6 +44,26 @@ namespace CookMaster.Aplication.Services
             }
         }
 
+        public async Task<(bool IsSuccess, Product? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachProductsFromRecipeAsync(int IdRecipe)
+        {
+            try
+            {
+                ICollection<Product> products = _unitOfWork.ProductRepository.GetProductsByIdRecipe(IdRecipe);
+                // add IdRecipe null to photos
+                foreach (Product p in products)
+                {
+                    p.IdRecipe = null;
+                    var result = await UpdateAndSaveAsync(p, p.Id);
+                }
+                return (true, default(Product), HttpStatusCode.OK, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return LogError(ex.Message);
+            }
+
+        }
+
         public async Task<(bool IsSuccess, Product? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateProductAsync(AddUpdateProductDTO dto, int id)
         {
             try
@@ -59,10 +75,6 @@ namespace CookMaster.Aplication.Services
                     return existingEntityResult;
                 }
 
-                if (await _unitOfWork.ProductRepository.ProductEditAllowedAsync(dto.Name))
-                {
-                    return (false, default(Product), HttpStatusCode.BadRequest, "Product name: " + dto.Name + " already exist in the database");
-                }
 
                 if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
                 {

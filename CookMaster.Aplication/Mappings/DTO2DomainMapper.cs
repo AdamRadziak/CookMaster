@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CookMaster.Aplication.DTOs;
 using CookMaster.Persistance.SqlServer.Model;
+using CookMaster.Persistence.UOW.Interfaces;
 
 namespace CookMaster.Aplication.Mappings
 {
@@ -30,12 +31,19 @@ namespace CookMaster.Aplication.Mappings
             return step;
         }
 
-        public static Photo MapPhoto(this AddUpdatePhotoDTO dto)
+        public static Photo MapPhoto(this AddUpdatePhotoDTO dto, byte[]? Data)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AddUpdatePhotoDTO, Photo>());
-            var mapper = new Mapper(config);
-            Photo photo = mapper.Map<Photo>(dto);
-            return photo;
+            if (dto == null)
+            { throw new ArgumentNullException(nameof(dto)); }
+            Photo domainPhoto = new()
+            {
+                IdRecipe = dto.IdRecipe,
+                FileName = dto.FileName,
+                FilePath = dto.FilePath,
+                Data = Data
+
+            };
+            return domainPhoto;
         }
 
         public static Recipe MapRecipe(this AddUpdateRecipeDTO dto)
@@ -44,6 +52,41 @@ namespace CookMaster.Aplication.Mappings
             var mapper = new Mapper(config);
             Recipe recipe = mapper.Map<Recipe>(dto);
             return recipe;
+        }
+
+        public static UserMenu MapUserMenu(this AddUpdateUserMenuDTO dto)
+        {
+            if (dto == null)
+            { throw new ArgumentNullException(nameof(dto)); }
+            // automapper for recipes
+            var config = new MapperConfiguration(cfg => cfg.CreateMap<AddUpdateRecipeDTO, Recipe>());
+            var mapper = new Mapper(config);
+            ICollection<Recipe> recipes = mapper.Map<ICollection<Recipe>>(dto.Recipes);
+
+            UserMenu domainUserMenu = new()
+            {
+                Name = dto.Name,
+                IdUser = dto.IdUser,
+                Category = dto.Category,
+                Recipes = recipes,
+            };
+
+            return domainUserMenu;
+
+        }
+
+        public static UserMenu GenerateUserMenuMaping(this GenerateUserMenuDTO dto, ICollection<Recipe> recipes)
+        {
+            if (dto == null)
+            { throw new ArgumentNullException(nameof(dto)); }
+            UserMenu domainUserMenu = new()
+            {
+                Name = dto.Name,
+                IdUser = dto.IdUser,
+                Category = dto.Category,
+                Recipes = recipes
+            };
+            return domainUserMenu;
         }
     }
 }

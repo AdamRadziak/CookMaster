@@ -28,9 +28,6 @@ public partial class CookMasterDbContext : DbContext
 
     public virtual DbSet<UserMenu> UserMenus { get; set; }
 
-    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-    //        => optionsBuilder.UseSqlServer("Server=localhost,1433;Database=CookMasterDB;User Id=sa;Password=Your@Password;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -41,35 +38,39 @@ public partial class CookMasterDbContext : DbContext
 
             entity.HasOne(d => d.IdRecipeNavigation).WithMany(p => p.Photos)
                 .HasForeignKey(d => d.IdRecipe)
-                .HasConstraintName("FK_Photos_Recipes");
+                .HasConstraintName("FK_Photos_Recipes")
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.Property(e => e.Amount).HasMaxLength(50);
             entity.Property(e => e.Category).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.Unit).HasMaxLength(30);
 
             entity.HasOne(d => d.IdRecipeNavigation).WithMany(p => p.Products)
                 .HasForeignKey(d => d.IdRecipe)
-                .HasConstraintName("FK_Products_Recipes");
+                .HasConstraintName("FK_Products_Recipes")
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<Recipe>(entity =>
         {
+            entity.Property(e => e.Category)
+                .HasMaxLength(30)
+                .IsFixedLength();
             entity.Property(e => e.Description).HasMaxLength(100);
             entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.PrepareTime)
-                .HasMaxLength(20)
-                .IsFixedLength();
 
             entity.HasOne(d => d.IdMenuNavigation).WithMany(p => p.Recipes)
                 .HasForeignKey(d => d.IdMenu)
-                .HasConstraintName("FK_Recipes_UserMenu");
+                .HasConstraintName("FK_Recipes_UserMenu")
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Recipes)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("FK_Recipes_Users");
+                .HasConstraintName("FK_Recipes_Users")
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<Step>(entity =>
@@ -78,7 +79,8 @@ public partial class CookMasterDbContext : DbContext
 
             entity.HasOne(d => d.IdRecipeNavigation).WithMany(p => p.Steps)
                 .HasForeignKey(d => d.IdRecipe)
-                .HasConstraintName("FK_Steps_Recipes");
+                .HasConstraintName("FK_Steps_Recipes")
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -91,12 +93,13 @@ public partial class CookMasterDbContext : DbContext
         {
             entity.ToTable("UserMenu");
 
+            entity.Property(e => e.Category).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.RecipeCategory).HasMaxLength(50);
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.UserMenus)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("FK_UserMenu_Users");
+                .HasConstraintName("FK_UserMenu_Users")
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         OnModelCreatingPartial(modelBuilder);

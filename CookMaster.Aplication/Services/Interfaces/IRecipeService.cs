@@ -24,5 +24,7 @@ namespace CookMaster.Aplication.Services.Interfaces
         Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> AddRecipe2FavouritesAsync(int IdRecipe, string UserEmail);        
         Task<(bool IsSuccess, IPagedList<GetSingleRecipeDTO>? entityList, HttpStatusCode StatusCode, string ErrorMessage)> GetFavouritesAsync<TOut>(string UserEmail, SieveModel paginationParams);
 
+        Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteRecipe(int Id);
+
     }
 }

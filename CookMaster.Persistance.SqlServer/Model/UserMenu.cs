@@ -11,7 +11,7 @@ public partial class UserMenu
 
     public string? Name { get; set; }
 
-    public string? RecipeCategory { get; set; }
+    public string? Category { get; set; }
 
     public virtual User? IdUserNavigation { get; set; }
 

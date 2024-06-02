@@ -35,7 +35,8 @@ CREATE TABLE [dbo].[Products](
 	[IdRecipe] [int] NULL,
 	[Name] [nvarchar](50) NULL,
 	[Category] [nvarchar](50) NULL,
-	[Amount] [nvarchar](50) NULL,
+	[Amount] [float] NULL,
+	[Unit] [nvarchar](30) NULL
  CONSTRAINT [PK_Products] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -51,7 +52,8 @@ CREATE TABLE [dbo].[Recipes](
 	[IdMenu] [int] NULL,
 	[IdUser] [int] NULL,
 	[Name] [nvarchar](50) NULL,
-	[PrepareTime] [nchar](20) NULL,
+	[Category] [nvarchar](30) NULL,
+	[PrepareTime] [int] NULL,
 	[MealCount] [int] NULL,
 	[Rate] [float] NULL,
 	[Popularity] [float] NULL,
@@ -86,7 +88,7 @@ CREATE TABLE [dbo].[UserMenu](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[IdUser] [int] NULL,
 	[Name] [nvarchar](50) NULL,
-	[RecipeCategory] [nvarchar](50) NULL,
+	[Category] [nvarchar](50) NULL,
  CONSTRAINT [PK_UserMenu] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

@@ -15,6 +15,8 @@ namespace CookMaster.Aplication.Services.Interfaces
 
         Task<(bool IsSuccess, Product? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateProductAsync(AddUpdateProductDTO dto, int id);
 
+        Task<(bool IsSuccess, Product? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachProductsFromRecipeAsync(int IdRecipe);
+
 
     }
 }

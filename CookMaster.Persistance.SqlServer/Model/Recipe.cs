@@ -13,7 +13,9 @@ public partial class Recipe
 
     public string? Name { get; set; }
 
-    public string? PrepareTime { get; set; }
+    public string? Category { get; set; }
+
+    public int? PrepareTime { get; set; }
 
     public int? MealCount { get; set; }
 

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Linq;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CookMaster.Persistence.Repositories
 {
@@ -12,6 +13,16 @@ namespace CookMaster.Persistence.Repositories
     {
         public RecipeRepository(CookMasterDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public ICollection<Recipe> GenerateRecipeForUserMenu(int dayCount, int mealCount, double rate, double popularity, int prepareTime)
+        {
+            var query =     Entities.Where(e => e.MealCount >= mealCount)
+                             .Where(e => e.Rate >= rate)
+                             .Where(e => e.Popularity >= popularity)
+                             .Where(e => e.PrepareTime <= prepareTime)
+                             .Take(dayCount*3).ToList();
+            return query;
         }
 
         public IQueryable<Recipe> GetAllAsync(int c)

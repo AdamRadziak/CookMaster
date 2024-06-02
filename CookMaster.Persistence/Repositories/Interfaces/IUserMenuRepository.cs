@@ -6,8 +6,9 @@ namespace CookMaster.Persistence.Repositories.Interfaces
     {
         Task<UserMenu> GetByIdAsync(int id);
 
-        IQueryable<UserMenu> GetAllByUserEmailAsync(int count, string useremail);
+        IQueryable<UserMenu> GetAllByUserIdAsync(int count, int IdUser);
 
         Task<bool> IsMenuExistAsync(int id);
+
     }
 }

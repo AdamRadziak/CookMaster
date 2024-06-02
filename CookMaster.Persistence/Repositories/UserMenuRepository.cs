@@ -11,11 +11,12 @@ namespace CookMaster.Persistence.Repositories
         {
         }
 
-        public IQueryable<UserMenu> GetAllByUserEmailAsync(int c, string useremail)
+
+        public IQueryable<UserMenu> GetAllByUserIdAsync(int c, int IdUser)
         {
             var query = Entities.Include(e => e.Recipes)
                                        .Include(e => e.IdUserNavigation.Email)
-                                       .Take(c).Where(e => e.IdUserNavigation.Email == useremail)
+                                       .Take(c).Where(e => e.IdUser == IdUser)
                                        .AsQueryable();
 
             return query;
@@ -24,7 +25,6 @@ namespace CookMaster.Persistence.Repositories
         public async Task<UserMenu> GetByIdAsync(int id)
         {
             var query = await Entities.Include(e => e.Recipes)
-                                        .Include(e => e.IdUserNavigation.Email)
                                        .FirstOrDefaultAsync(e => e.Id == id);
 
             return query;

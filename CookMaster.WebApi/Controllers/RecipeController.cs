@@ -20,16 +20,22 @@ namespace CookMaster.WebApi.Controllers
     public class RecipeController : ControllerBase
     {
         private readonly IRecipeService _service;
+        private readonly IProductService _productService;
+        private readonly IStepService _stepService;
+        private readonly IPhotoService _photoService;
         private readonly ILogger<RecipeController> _logger;
 
-        public RecipeController(IRecipeService service, ILogger<RecipeController> logger)
+        public RecipeController(IRecipeService service, IProductService prodService, IStepService stepService, IPhotoService phototService, ILogger<RecipeController> logger)
         {
             _service = service;
+            _productService = prodService;
+            _stepService = stepService; 
+            _photoService = phototService;
             _logger = logger;
         }
 
         [HttpGet("{id}")]
-        [SwaggerOperation(OperationId = "GetRecipeByName")]
+        [SwaggerOperation(OperationId = "GetRecipeById")]
         public async Task<ActionResult<GetSingleRecipeDTO>> GetRecipe(int id)
         {
             var result = await _service.GetByIdAsync(id);
@@ -116,7 +122,10 @@ namespace CookMaster.WebApi.Controllers
         [SwaggerOperation(OperationId = "DeleteRecipe")]
         public async Task<IActionResult> DeleteRecipe(int id)
         {
-            var result = await _service.DeleteAndSaveAsync(id);
+            await _productService.DeatachProductsFromRecipeAsync(id);
+            await _stepService.DeatachStepsFromRecipeAsync(id);
+            await _photoService.DeatachPhotosFromRecipeAsync(id);
+            var result = await _service.DeleteRecipe(id);
 
             if (!result.IsSuccess)
             {

@@ -45,29 +45,18 @@ namespace CookMaster.Aplication.Services
             }
         }
 
-        public async Task<(bool IsSuccess, Step? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateStepAsync(AddUpdateStepDTO dto, int id)
+        public async Task<(bool IsSuccess, Step? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachStepsFromRecipeAsync(int IdRecipe)
         {
             try
             {
-                var existingEntityResult = await WithoutTracking().GetByIdAsync(id);
-
-                if (!existingEntityResult.IsSuccess)
+                ICollection<Step> steps = _unitOfWork.StepRepository.GetStepsByIdRecipe(IdRecipe);
+                // add IdRecipe null to photos
+                foreach (Step s in steps)
                 {
-                    return existingEntityResult;
+                    s.IdRecipe = null;
+                    var result = await UpdateAndSaveAsync(s, s.Id);
                 }
-
-                if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
-                {
-                    return (false, default(Step), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
-                }
-
-
-                var domainEntity = dto.MapStep();
-
-                domainEntity.Id = id;
-
-
-                return await UpdateAndSaveAsync(domainEntity, id);
+                return (true, default(Step), HttpStatusCode.OK, string.Empty);
             }
             catch (Exception ex)
             {
@@ -75,7 +64,38 @@ namespace CookMaster.Aplication.Services
             }
 
         }
+
+    public async Task<(bool IsSuccess, Step? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateStepAsync(AddUpdateStepDTO dto, int id)
+    {
+        try
+        {
+            var existingEntityResult = await WithoutTracking().GetByIdAsync(id);
+
+            if (!existingEntityResult.IsSuccess)
+            {
+                return existingEntityResult;
+            }
+
+            if (!await _unitOfWork.RecipeRepository.RecipeExistAsync(dto.IdRecipe))
+            {
+                return (false, default(Step), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
+            }
+
+
+            var domainEntity = dto.MapStep();
+
+            domainEntity.Id = id;
+
+
+            return await UpdateAndSaveAsync(domainEntity, id);
+        }
+        catch (Exception ex)
+        {
+            return LogError(ex.Message);
+        }
+
+    }
+}
 }
 
 
-    }

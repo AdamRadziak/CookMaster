@@ -38,8 +38,8 @@ namespace CookMaster.Aplication.Services
                     return (false, default(Photo), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
                 }
                 // convert photo to byte
-                dto.Data = PhotoTools.ConvertFromFile2Byte(dto.FilePath);
-                var newEntity = dto.MapPhoto();
+                var Data = PhotoTools.ConvertFromFile2Byte(dto.FilePath);
+                var newEntity = dto.MapPhoto(Data);
 
                 var result = await AddAndSaveAsync(newEntity);
                 return (true, result.entity, HttpStatusCode.OK, string.Empty);
@@ -48,6 +48,26 @@ namespace CookMaster.Aplication.Services
             {
                 return LogError(ex.Message);
             }
+        }
+
+        public async Task<(bool IsSuccess, Photo? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachPhotosFromRecipeAsync(int IdRecipe)
+        {
+            try
+            {
+                ICollection<Photo> photos = _unitOfWork.PhotoRepository.GetPhotosByIdRecipe(IdRecipe);
+                // add IdRecipe null to photos
+                foreach (Photo p in photos)
+                {
+                    p.IdRecipe = null;
+                    var result = await UpdateAndSaveAsync(p, p.Id);
+                }
+                return (true,default(Photo), HttpStatusCode.OK, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return LogError(ex.Message);
+            }
+
         }
 
         public async Task<(bool IsSuccess, Photo? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdatePhotoAsync(AddUpdatePhotoDTO dto, int id)
@@ -65,9 +85,9 @@ namespace CookMaster.Aplication.Services
                     return (false, default(Photo), HttpStatusCode.BadRequest, "Recipe id: " + dto.IdRecipe + " not exist in the database");
                 }
                 // convert photo to byte
-                dto.Data = PhotoTools.ConvertFromFile2Byte(dto.FilePath);
+                var Data = PhotoTools.ConvertFromFile2Byte(dto.FilePath);
 
-                var domainEntity = dto.MapPhoto();
+                var domainEntity = dto.MapPhoto(Data);
 
                 domainEntity.Id = id;
 

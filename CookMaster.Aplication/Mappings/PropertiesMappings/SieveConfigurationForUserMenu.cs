@@ -16,7 +16,7 @@ namespace CookMaster.Aplication.Mappings.PropertiesMappings
                     .CanSort()
                     .CanFilter();
 
-            mapper.Property<UserMenu>(p => p.RecipeCategory)
+            mapper.Property<UserMenu>(p => p.Category)
                     .CanSort()
                     .CanFilter();
 

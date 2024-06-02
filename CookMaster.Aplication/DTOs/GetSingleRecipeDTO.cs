@@ -13,7 +13,8 @@ namespace CookMaster.Aplication.DTOs
         public int? IdUser { get; set; } = 0!;
         public int? IdMenu { get; set; } = 0!;
         public string Name { get; set; } = null!;
-        public string PrepareTime { get; set; } = null!;
+        public string Category { get; set; } = null!;
+        public int? PrepareTime { get; set; } = 0!;
         public int? MealCount { get; set; } = 0!;
         public double? Rate { get; set; } = 0.0!;
         public double? Popularity { get; set; } = 0.0!;

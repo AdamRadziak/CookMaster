@@ -9,6 +9,10 @@ namespace CookMaster.Persistence.Repositories
     {
         public ProductRepository(CookMasterDbContext dbContext) : base(dbContext) { }
 
+        public ICollection<Product> GetProductsByIdRecipe(int IdRecipe)
+        {
+            return Entities.Where(e => e.IdRecipe == IdRecipe).ToList();
+        }
 
         public async Task<bool> ProductEditAllowedAsync(string name)
         {
