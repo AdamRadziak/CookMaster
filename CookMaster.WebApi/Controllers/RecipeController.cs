@@ -135,5 +135,20 @@ namespace CookMaster.WebApi.Controllers
             return NoContent();
         }
 
+        [HttpDelete("DeleteFavourite/{id}")]
+        [SwaggerOperation(OperationId = "DeleteRecipeFromFavourities")]
+        public async Task<IActionResult> DeleteRecipeFromFavourite(int id)
+        {
+
+            var result = await _service.DeleteFromFavouriteAsync(id);
+
+            if (!result.IsSuccess)
+            {
+                return Problem(statusCode: (int)result.StatusCode, title: "Delete error.", detail: result.ErrorMessage);
+            }
+
+            return NoContent();
+        }
+
     }
 }

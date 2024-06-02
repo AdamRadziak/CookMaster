@@ -54,14 +54,10 @@ namespace CookMaster.Aplication.Mappings
             return recipe;
         }
 
-        public static UserMenu MapUserMenu(this AddUpdateUserMenuDTO dto)
+        public static UserMenu MapUserMenu(this AddUpdateUserMenuDTO dto, ICollection<Recipe> recipes)
         {
             if (dto == null)
             { throw new ArgumentNullException(nameof(dto)); }
-            // automapper for recipes
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AddUpdateRecipeDTO, Recipe>());
-            var mapper = new Mapper(config);
-            ICollection<Recipe> recipes = mapper.Map<ICollection<Recipe>>(dto.Recipes);
 
             UserMenu domainUserMenu = new()
             {

@@ -1,6 +1,7 @@
 ﻿using CookMaster.Aplication.DTOs;
 using CookMaster.Aplication.Helpers.PagedList;
 using CookMaster.Aplication.Mappings;
+using CookMaster.Aplication.Services;
 using CookMaster.Aplication.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ namespace CookMaster.WebApi.Controllers
     public class UserMenuController : ControllerBase
     {
         private readonly IUserMenuService _service;
+        private readonly IRecipeService _recipeService;
         private readonly ILogger<UserMenuController> _logger;
 
-        public UserMenuController(IUserMenuService service, ILogger<UserMenuController> logger)
+        public UserMenuController(IUserMenuService service, IRecipeService recipeService, ILogger<UserMenuController> logger)
         {
             _service = service;
+            _recipeService = recipeService;
             _logger = logger;
         }
 
@@ -78,6 +81,21 @@ namespace CookMaster.WebApi.Controllers
             }
 
             return StatusCode((int)result.StatusCode, result.entity.MapGetSingleUserMenuDTO());
+        }
+
+        [HttpDelete("{id}")]
+        [SwaggerOperation(OperationId = "DeleteUserMenu")]
+        public async Task<IActionResult> DeleteUserMenu(int id)
+        {
+            await _recipeService.DeatachRecipesFromUserMenuAsync(id);
+            var result = await _service.DeleteUserMenuAsync(id);
+
+            if (!result.IsSuccess)
+            {
+                return Problem(statusCode: (int)result.StatusCode, title: "Delete error.", detail: result.ErrorMessage);
+            }
+
+            return NoContent();
         }
 
 

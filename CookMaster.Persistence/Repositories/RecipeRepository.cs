@@ -17,7 +17,10 @@ namespace CookMaster.Persistence.Repositories
 
         public ICollection<Recipe> GenerateRecipeForUserMenu(int dayCount, int mealCount, double rate, double popularity, int prepareTime)
         {
-            var query =     Entities.Where(e => e.MealCount >= mealCount)
+            var query =     Entities.Include(e => e.Photos)
+                             .Include(e => e.Products)
+                             .Include(e => e.Steps)
+                             .Where(e => e.MealCount >= mealCount)
                              .Where(e => e.Rate >= rate)
                              .Where(e => e.Popularity >= popularity)
                              .Where(e => e.PrepareTime <= prepareTime)
@@ -53,6 +56,11 @@ namespace CookMaster.Persistence.Repositories
                                        .Include(e => e.Steps)
                                        .Where(e => e.IdUserNavigation.Email == email).AsQueryable();
             return query;
+        }
+
+        public ICollection<Recipe> GetRecipesByIdMenu(int IdMenu)
+        {
+            return Entities.Where(e => e.IdMenu == IdMenu).ToList();
         }
 
         public async Task<bool> RecipeExistAsync(int id)

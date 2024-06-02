@@ -24,6 +24,23 @@ namespace CookMaster.Aplication.Services
         {
         }
 
+        public async Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteUserMenuAsync(int Id)
+        {
+            // add null to foreign key in receipe
+            var userMenu = _unitOfWork.UserMenuRepository.GetByIdAsync(Id);
+            userMenu.Result.IdUser = null;
+            var resultUpdate = UpdateAndSaveAsync(userMenu.Result, Id);
+            // delete and save async recipe
+            if (resultUpdate.Result.IsSuccess)
+            {
+                return await DeleteAndSaveAsync(Id);
+            }
+            else
+            {
+                return (false, default(UserMenu), HttpStatusCode.BadRequest, "Delete error");
+            }
+        }
+
         public async Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> GenerateUserMenuAsync(GenerateUserMenuDTO dto)
         {
             try
@@ -93,14 +110,20 @@ namespace CookMaster.Aplication.Services
             try
             {
                 var existingEntityResult = await WithoutTracking().GetByIdAsync(id);
-
+                ICollection<Recipe> recipes = new List<Recipe>();
+                
                 if (!existingEntityResult.IsSuccess)
                 {
                     return existingEntityResult;
                 }
+                // get all recipes by IdRecipe
+                foreach(int Id in dto.IdRecipes)
+                {
+                    var result = await _unitOfWork.RecipeRepository.GetByIdAsync(Id);
+                    recipes.Add(result);
+                }
 
-
-                var domainEntity = dto.MapUserMenu();
+                var domainEntity = dto.MapUserMenu(recipes);
 
                 domainEntity.Id = id;
 

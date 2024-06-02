@@ -17,6 +17,7 @@ namespace CookMaster.Aplication.Services.Interfaces
         Task<(bool IsSuccess, IPagedList<GetSingleUserMenuDTO>? entityList, HttpStatusCode StatusCode, string ErrorMessage)> GetListAsyncForUser<TOut>(SieveModel paginationParams, int IdUser);
         Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> GenerateUserMenuAsync(GenerateUserMenuDTO dto);
         Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateUserMenuAsync(AddUpdateUserMenuDTO dto, int id);
+        Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteUserMenuAsync(int Id);
 
 
     }

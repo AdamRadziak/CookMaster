@@ -13,6 +13,7 @@ namespace CookMaster.Persistence.Repositories.Interfaces
         IQueryable<Recipe> GetFavouritiesByUser(string email);
 
         ICollection<Recipe> GenerateRecipeForUserMenu(int dayCount, int mealCount, double rate, double popularity, int prepareTime);
+        ICollection<Recipe> GetRecipesByIdMenu(int IdMenu);
 
 
     }

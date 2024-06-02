@@ -15,7 +15,6 @@ namespace CookMaster.Persistence.Repositories
         public IQueryable<UserMenu> GetAllByUserIdAsync(int c, int IdUser)
         {
             var query = Entities.Include(e => e.Recipes)
-                                       .Include(e => e.IdUserNavigation.Email)
                                        .Take(c).Where(e => e.IdUser == IdUser)
                                        .AsQueryable();
 

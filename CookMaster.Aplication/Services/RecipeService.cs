@@ -27,7 +27,7 @@ namespace CookMaster.Aplication.Services
     {
         IProductService _productService;
         IPhotoService _photoService;
-        IStepService _StepService;
+        IRecipeService _RecipeService;
         public RecipeService(ILogger<Recipe> logger, ISieveProcessor sieveProcessor, IOptions<SieveOptions> sieveOptions, IUnitOfWork unitOfWork) : base(logger, sieveProcessor, sieveOptions, unitOfWork)
         {
         }
@@ -196,6 +196,52 @@ namespace CookMaster.Aplication.Services
 
 
                 
+        }
+
+        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteFromFavouriteAsync(int Id)
+        {
+            try
+            {
+                // first find recipe by id
+                var existingEntityResult = await WithoutTracking().GetByIdAsync(Id);
+                if (!existingEntityResult.IsSuccess)
+                {
+                    return existingEntityResult;
+                }
+                // add null to IdUser
+                existingEntityResult.entity.IdUser = null;
+                existingEntityResult.entity.IdUserNavigation = null;
+
+
+                return await UpdateAndSaveAsync(existingEntityResult.entity, Id);
+
+            }
+            catch (Exception ex)
+            {
+                var error = LogError(ex.Message);
+
+                return (false, default, error.StatusCode, error.ErrorMessage);
+            }
+        }
+
+        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachRecipesFromUserMenuAsync(int IdMenu)
+        {
+            try
+            {
+                ICollection<Recipe> Recipes = _unitOfWork.RecipeRepository.GetRecipesByIdMenu(IdMenu);
+                // add IdRecipe null to photos
+                foreach (Recipe r in Recipes)
+                {
+                    r.IdMenu = null;
+                    r.IdMenuNavigation = null;
+                    var result = await UpdateAndSaveAsync(r, r.Id);
+                }
+                return (true, default(Recipe), HttpStatusCode.OK, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return LogError(ex.Message);
+            }
         }
     }
 }

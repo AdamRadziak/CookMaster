@@ -12,7 +12,7 @@ namespace CookMaster.Aplication.DTOs
         public string Name { get; set; } = null!;
         public int IdUser { get; set; } = 0!;
         public string Category{ get; set; } = null!;
-        public ICollection<Recipe> Recipes { get; set; } = null!;
+        public ICollection<int> IdRecipes { get; set; } = null!;
 
 
 
