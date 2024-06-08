@@ -198,7 +198,7 @@ namespace CookMaster.Aplication.Services
                 
         }
 
-        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteFromFavouriteAsync(int Id)
+        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteFromFavouriteAsync(int Id, string Useremail)
         {
             try
             {
@@ -208,7 +208,14 @@ namespace CookMaster.Aplication.Services
                 {
                     return existingEntityResult;
                 }
-                // add null to IdUser
+                // if this user not exist
+                if (!await _unitOfWork.UserRepository.EmailExistsAsync(Useremail))
+                {
+                    return (false, default(Recipe), HttpStatusCode.BadRequest, "User Email" + Useremail + "not exist in the database");
+                }
+                var query = await _unitOfWork.RecipeRepository.GetFavouritiesByUser(Useremail).ToListAsync();
+                // get favourite from user by id
+                var existingEntity = query.FirstOrDefault(query => query.Id == Id);
                 existingEntityResult.entity.IdUser = null;
                 existingEntityResult.entity.IdUserNavigation = null;
 

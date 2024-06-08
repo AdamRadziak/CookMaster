@@ -135,12 +135,12 @@ namespace CookMaster.WebApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete("DeleteFavourite/{id}")]
+        [HttpDelete("DeleteFavourite/{id}/ForUser/{Email}")]
         [SwaggerOperation(OperationId = "DeleteRecipeFromFavourities")]
-        public async Task<IActionResult> DeleteRecipeFromFavourite(int id)
+        public async Task<IActionResult> DeleteRecipeFromFavourite(int id, string Email)
         {
 
-            var result = await _service.DeleteFromFavouriteAsync(id);
+            var result = await _service.DeleteFromFavouriteAsync(id,Email);
 
             if (!result.IsSuccess)
             {
