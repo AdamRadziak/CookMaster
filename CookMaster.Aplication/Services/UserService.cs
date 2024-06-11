@@ -1,6 +1,7 @@
 ﻿using CookMaster.Aplication.DTOs;
 using CookMaster.Aplication.Mappings;
 using CookMaster.Aplication.Services.Interfaces;
+using CookMaster.Aplication.Utils;
 using CookMaster.Persistance.SqlServer.Model;
 using CookMaster.Persistence.UOW.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -23,9 +24,10 @@ namespace CookMaster.Aplication.Services
         {
             try
             {
-                if (await _unitOfWork.UserRepository.EmailExistsAsync(dto.Email))
+                string DecodedEmail = Base64EncodeDecode.Base64Decode(dto.EmailHash);
+                if (await _unitOfWork.UserRepository.EmailExistsAsync(DecodedEmail))
                 {
-                    return (false, default(User), HttpStatusCode.BadRequest, "Email: " + dto.Email + " already registered.");
+                    return (false, default(User), HttpStatusCode.BadRequest, "Email: " + DecodedEmail + " already registered.");
                 }
 
                 var newEntity = dto.MapUser();
@@ -41,6 +43,33 @@ namespace CookMaster.Aplication.Services
             }
         }
 
+        public async Task<(bool IsSuccess, User? entity, HttpStatusCode StatusCode, string ErrorMessage)> GetPasswordByEmail(string emailHash)
+        {
+            try
+            {
+                string DecodedEmail = Base64EncodeDecode.Base64Decode(emailHash);
+                var existingEntityResult = await _unitOfWork.UserRepository.GetByEmailAsync(DecodedEmail);
+                if (existingEntityResult == null)
+                {
+                    return (false, default(User), HttpStatusCode.BadRequest, "Username with email: " + DecodedEmail + " not exist in the database");
+                }
+
+                string encodedEmail = Base64EncodeDecode.Base64Encode(existingEntityResult.Email);
+                string encodedPass = Base64EncodeDecode.Base64Encode(existingEntityResult.Password);
+                // replace in existing entity result encoded values
+                existingEntityResult.Email = encodedEmail;
+                existingEntityResult.Password = encodedPass;
+
+
+                return (true, existingEntityResult, HttpStatusCode.OK, String.Empty);
+
+                
+            }
+            catch (Exception ex)
+            {
+                return LogError(ex.Message);
+            }
+        }
 
         public async Task<(bool IsSuccess, User? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateUserEmailAsync(AddUpdateUserDTO dto, int id)
         {
@@ -53,9 +82,11 @@ namespace CookMaster.Aplication.Services
                     return existingEntityResult;
                 }
 
-                if (!await _unitOfWork.UserRepository.IsEmailEditAllowedAsync(dto.Email, id))
+                string DecodedEmail = Base64EncodeDecode.Base64Decode(dto.EmailHash);
+
+                if (!await _unitOfWork.UserRepository.IsEmailEditAllowedAsync(DecodedEmail, id))
                 {
-                    return (false, default(User), HttpStatusCode.BadRequest, "Email: " + dto.Email + " already registered.");
+                    return (false, default(User), HttpStatusCode.BadRequest, "Email: " + DecodedEmail + " already registered.");
                 }
 
                 var domainEntity = dto.MapUser();
@@ -81,10 +112,11 @@ namespace CookMaster.Aplication.Services
                 {
                     return existingEntityResult;
                 }
+                string DecodedPass = Base64EncodeDecode.Base64Decode(dto.PasswordHash);
 
-                if (!await _unitOfWork.UserRepository.IsPasswordEditAllowedAsync(dto.Password, id))
+                if (!await _unitOfWork.UserRepository.IsPasswordEditAllowedAsync(DecodedPass, id))
                 {
-                    return (false, default(User), HttpStatusCode.BadRequest, "This password: " + dto.Password + " is the same with previous");
+                    return (false, default(User), HttpStatusCode.BadRequest, "This password: " + DecodedPass + " is the same with previous");
                 }
            
                     var domainEntity = dto.MapUser();

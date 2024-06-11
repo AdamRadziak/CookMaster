@@ -1,4 +1,6 @@
-﻿using CookMaster.Aplication.DTOs;
+﻿using Azure.Core;
+using CookMaster.Aplication.DTOs;
+using CookMaster.Aplication.Utils;
 using FluentValidation;
 
 namespace CookMaster.Aplication.Validation
@@ -7,8 +9,9 @@ namespace CookMaster.Aplication.Validation
     {
         public AddUpdateUserDTOValidator()
         {
-            RuleFor(request => request.Email).EmailAddress();
-            RuleFor(request => request.Password)
+          
+            RuleFor(request => Base64EncodeDecode.Base64Decode(request.EmailHash)).EmailAddress();
+            RuleFor(request => Base64EncodeDecode.Base64Decode(request.PasswordHash))
                 //.NotEmpty()
                 .MinimumLength(6).WithMessage("Minimalna długość pola 'Hasło' to {MinLength} znaków")
                 .Matches("[A-Z]").WithMessage("'Hasło' musi zawierać co najmniej jedną wielką literę.")

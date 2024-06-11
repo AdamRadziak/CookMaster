@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sieve.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Reflection;
 
 namespace CookMaster.WebApi.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("api/Users")]
     public class UserController : ControllerBase
@@ -23,6 +24,7 @@ namespace CookMaster.WebApi.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         [SwaggerOperation(OperationId = "GetUserById")]
         public async Task<ActionResult<GetSingleUserDTO>> GetUser(int id)
@@ -37,6 +39,7 @@ namespace CookMaster.WebApi.Controllers
             return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleUserDTO());
         }
 
+        [Authorize]
         [HttpGet("list")]
         [SwaggerOperation(OperationId = "GetUsers")]
         public async Task<ActionResult<IPagedList<GetSingleUserDTO>>> GetUsers([FromQuery] SieveModel paginationParams)
@@ -51,9 +54,9 @@ namespace CookMaster.WebApi.Controllers
             return Ok(result.entityList);
         }
 
-        [HttpPost("add")]
-        [SwaggerOperation(OperationId = "AddUser")]
-        public async Task<ActionResult<GetSingleUserDTO>> AddCustomer([FromBody] AddUpdateUserDTO dto)
+        [HttpPost("register")]
+        [SwaggerOperation(OperationId = "RegisterUser")]
+        public async Task<ActionResult<GetSingleUserDTO>> AddUser([FromBody] AddUpdateUserDTO dto)
         {
             var result = await _userService.CreateNewUserAsync(dto);
 
@@ -65,6 +68,7 @@ namespace CookMaster.WebApi.Controllers
             return CreatedAtAction(nameof(GetUser), new { id = result.entity.Id }, result.entity.MapGetSingleUserDTO());
         }
 
+        [Authorize]
         [HttpPut("updatePass/{id}")]
         [SwaggerOperation(OperationId = "UpdateUserPassword")]
         public async Task<ActionResult<GetSingleUserDTO>> UpdateUserPassword(int id, [FromBody] AddUpdateUserDTO dto)
@@ -79,6 +83,7 @@ namespace CookMaster.WebApi.Controllers
             return StatusCode((int)result.StatusCode, result.entity.MapGetSingleUserDTO());
         }
 
+        [Authorize]
         [HttpPut("updateEmail/{id}")]
         [SwaggerOperation(OperationId = "UpdateUserEmail")]
         public async Task<ActionResult<GetSingleUserDTO>> UpdateUserEmail(int id, [FromBody] AddUpdateUserDTO dto)
@@ -93,6 +98,7 @@ namespace CookMaster.WebApi.Controllers
             return StatusCode((int)result.StatusCode, result.entity.MapGetSingleUserDTO());
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         [SwaggerOperation(OperationId = "DeleteUser")]
         public async Task<IActionResult> DeleteUser(int id)
@@ -105,6 +111,20 @@ namespace CookMaster.WebApi.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpGet("GetUserPassBy/{email}")]
+        [SwaggerOperation(OperationId = "GetUserPassByEmail")]
+
+        public async Task<ActionResult<GetSingleUserDTO>> GetUserPasswordByEmail(string email)
+        {
+            var result = await _userService.GetPasswordByEmail(email);
+            if (!result.IsSuccess)
+            {
+                return Problem(statusCode: (int)result.StatusCode, title: "Read error.", detail: result.ErrorMessage);
+            }
+
+            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleUserDTO());
         }
     }
 }

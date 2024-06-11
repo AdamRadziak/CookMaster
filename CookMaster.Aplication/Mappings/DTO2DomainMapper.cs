@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CookMaster.Aplication.DTOs;
+using CookMaster.Aplication.Utils;
 using CookMaster.Persistance.SqlServer.Model;
 using CookMaster.Persistence.UOW.Interfaces;
 
@@ -9,10 +10,18 @@ namespace CookMaster.Aplication.Mappings
     {
         public static User MapUser(this AddUpdateUserDTO dto)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AddUpdateUserDTO, User>());
-            var mapper = new Mapper(config);
-            User user = mapper.Map<User>(dto);
-            return user;
+            if (dto == null)
+            { throw new ArgumentNullException(nameof(dto)); }
+            // decode password and email from base 64
+            string decodedEmail = Base64EncodeDecode.Base64Decode(dto.EmailHash);
+            string decodedPass = Base64EncodeDecode.Base64Decode(dto.PasswordHash);
+            User domainUser = new()
+            {
+                Email = decodedEmail,
+                Password = decodedPass
+            };
+        
+            return domainUser;
         }
 
         public static Product MapProduct(this AddUpdateProductDTO dto)

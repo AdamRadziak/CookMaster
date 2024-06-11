@@ -24,5 +24,7 @@ services:
 volumes:
   # SQL Server data volume
   cookmaster_data:
+  # define smtp service volume
+  smtp4dev-data:
     # Define the volume to persist SQL Server data
     

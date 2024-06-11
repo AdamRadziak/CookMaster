@@ -11,6 +11,8 @@ namespace CookMaster.Aplication.Services.Interfaces
         Task<(bool IsSuccess, User? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateUserPasswordAsync(AddUpdateUserDTO dto, int id);
         Task<(bool IsSuccess, User? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateUserEmailAsync(AddUpdateUserDTO dto, int id);
         Task<(bool IsSuccess, User? entity, HttpStatusCode StatusCode, string ErrorMessage)> VerifyPasswordByEmail(string email, string password);
+        Task<(bool IsSuccess, User? entity, HttpStatusCode StatusCode, string ErrorMessage)> GetPasswordByEmail(string emailHash);
+
 
     }
 }
