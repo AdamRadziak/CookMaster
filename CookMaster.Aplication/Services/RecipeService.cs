@@ -250,5 +250,26 @@ namespace CookMaster.Aplication.Services
                 return LogError(ex.Message);
             }
         }
+
+        public async Task<(bool IsSuccess, ICollection<Recipe> recipes, HttpStatusCode StatusCode, string ErrorMessage)> GetRecipesFromUserMenuAsync(int IdMenu)
+        {
+            try
+            {
+                var query =  _unitOfWork.RecipeRepository.GetRecipesByIdMenu(IdMenu);
+
+                if (query.Equals(null))
+                {
+                    return (false, default(ICollection<Recipe>), HttpStatusCode.NotFound, "Recipe for IdMenu " + IdMenu + " not exist in database");
+                }
+                else
+                {
+                    return (true, query, HttpStatusCode.OK, String.Empty);
+                }
+            }
+            catch (Exception ex)
+            {
+               return (false, default(ICollection<Recipe>), HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

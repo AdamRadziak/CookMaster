@@ -7,8 +7,10 @@ namespace CookMaster.Persistence.Repositories
 {
     public class UserMenuRepository : GenericRepository<UserMenu>, IUserMenuRepository
     {
+        IRecipeRepository recipeRepo;
         public UserMenuRepository(CookMasterDbContext dbContext) : base(dbContext)
         {
+            recipeRepo = new RecipeRepository(dbContext);
         }
 
 

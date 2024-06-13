@@ -32,18 +32,19 @@ namespace CookMaster.WebApi.Controllers
         public async Task<ActionResult<GetSingleUserMenuDTO>> GetUserMenu(int id)
         {
             var result = await _service.GetByIdAsync(id);
+            var recipes = await _recipeService.GetRecipesFromUserMenuAsync(id);
 
             if (!result.IsSuccess)
             {
                 return Problem(statusCode: (int?)HttpStatusCode.NotFound, title: "Read error.", detail: "Object not found in database");
             }
 
-            return StatusCode((int)HttpStatusCode.OK, result.entity!.MapGetSingleUserMenuDTO());
+            return StatusCode((int)HttpStatusCode.OK, result.entity!.MapGetSingleUserMenuDTO(recipes.recipes));
         }
 
-        [HttpGet("listByUserEmail/{IdUser}")]
+        [HttpGet("listByUserId/{IdUser}")]
         [SwaggerOperation(OperationId = "GetAllMenusByUserId")]
-        public async Task<ActionResult<IPagedList<GetSingleUserMenuDTO>>> GetUserMenusByEmail([FromQuery] SieveModel paginationParams,int IdUser)
+        public async Task<ActionResult<IPagedList<GetSingleUserMenuDTO>>> GetUserMenusById([FromQuery] SieveModel paginationParams,int IdUser)
         {
             var result = await _service.GetListAsyncForUser<GetSingleUserMenuDTO>(paginationParams, IdUser);
 
@@ -60,13 +61,12 @@ namespace CookMaster.WebApi.Controllers
         public async Task<ActionResult<GetSingleUserMenuDTO>> AddRecipe([FromBody] GenerateUserMenuDTO dto)
         {
             var result = await _service.GenerateUserMenuAsync(dto);
-
             if (!result.IsSuccess)
             {
                 return Problem(statusCode: (int)result.StatusCode, title: "Add error.", detail: result.ErrorMessage);
             }
 
-            return CreatedAtAction(nameof(GetUserMenu), new { id = result.entity.Id }, result.entity.MapGetSingleUserMenuDTO());
+            return CreatedAtAction(nameof(GetUserMenu), new { id = result.entity.Id }, result.entity.MapGetSingleUserMenuDTOGenerated());
         }
 
         [HttpPut("update/{id}")]
@@ -74,13 +74,14 @@ namespace CookMaster.WebApi.Controllers
         public async Task<ActionResult<GetSingleUserMenuDTO>> UpdateRecipe(int id, [FromBody] AddUpdateUserMenuDTO dto)
         {
             var result = await _service.UpdateUserMenuAsync(dto, id);
+            var recipes = await _recipeService.GetRecipesFromUserMenuAsync(id);
 
             if (!result.IsSuccess)
             {
                 return Problem(statusCode: (int)result.StatusCode, title: "Update error.", detail: result.ErrorMessage);
             }
 
-            return StatusCode((int)result.StatusCode, result.entity.MapGetSingleUserMenuDTO());
+            return StatusCode((int)result.StatusCode, result.entity.MapGetSingleUserMenuDTO(recipes.recipes));
         }
 
         [HttpDelete("{id}")]

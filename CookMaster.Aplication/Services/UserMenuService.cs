@@ -90,9 +90,19 @@ namespace CookMaster.Aplication.Services
         {
             try
             {
+                ICollection<Recipe> recipes = new List<Recipe>();
                 var query = _unitOfWork.UserMenuRepository.GetAllByUserIdAsync(50,IdUser);
+                ICollection<UserMenu> menus = query.ToList();
+                // get all recipes by Id menu
+                foreach (var menu in menus) {
+                    var recipes_query = _unitOfWork.RecipeRepository.GetRecipesByIdMenu(menu.Id);
+                    foreach (var recipe in recipes_query)
+                    {
+                        recipes.Add(recipe);
+                    }
+                        }
 
-                var result = await query.ToPagedListAsync(_sieveProcessor, _sieveOptions, paginationParams, resultEntity => Domain2DTOMapper.MapGetSingleUserMenuDTO(resultEntity));
+                var result = await query.ToPagedListAsync(_sieveProcessor, _sieveOptions, paginationParams, resultEntity => Domain2DTOMapper.MapGetSingleUserMenuDTO(resultEntity,recipes));
 
                 return (true, result, HttpStatusCode.OK, String.Empty);
             }

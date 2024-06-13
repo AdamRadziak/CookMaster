@@ -60,7 +60,10 @@ namespace CookMaster.Persistence.Repositories
 
         public ICollection<Recipe> GetRecipesByIdMenu(int IdMenu)
         {
-            return Entities.Where(e => e.IdMenu == IdMenu).ToList();
+            return Entities.Include(e => e.Photos)
+                                       .Include(e => e.Products)
+                                       .Include(e => e.Steps)
+                                       .Where(e => e.IdMenu == IdMenu).ToList();
         }
 
         public async Task<bool> RecipeExistAsync(int id)

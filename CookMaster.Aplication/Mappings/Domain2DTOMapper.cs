@@ -88,23 +88,42 @@ namespace CookMaster.Aplication.Mappings
 
         }
 
-        public static GetSingleUserMenuDTO MapGetSingleUserMenuDTO(this UserMenu domainUserMenu)
+        public static GetSingleUserMenuDTO MapGetSingleUserMenuDTO(this UserMenu domainUserMenu,ICollection<Recipe> recipes)
         {
             if (domainUserMenu == null)
             {
                 throw new ArgumentNullException(nameof(domainUserMenu));
             }
-            //automapper for dto products, steps, photos
-            //var config_recipe = new MapperConfiguration(cfg =>
-            //{
-            //    cfg.CreateMap<Recipe, GetSingleRecipeDTO>();
-            //});
-            //var mapper_recipe = new Mapper(config_recipe);
-            //ICollection<GetSingleRecipeDTO> dtoRecipes = mapper_recipe.Map<ICollection<GetSingleRecipeDTO>>(domainUserMenu.Recipes);
-            // map recipes to GetSingleRecipeDTO
 
             ICollection<GetSingleRecipeDTO> dtoRecipes = new List<GetSingleRecipeDTO>();
-            foreach(Recipe Recipe in domainUserMenu.Recipes)
+            foreach(Recipe Recipe in recipes)
+            {
+                dtoRecipes.Add(MapGetSingleRecipeDTO(Recipe));
+            }
+            GetSingleUserMenuDTO dto = new()
+            {
+                Id = domainUserMenu.Id,
+                Name = domainUserMenu.Name,
+                IdUser = domainUserMenu.IdUser,
+                Category = domainUserMenu.Category,
+                Recipes = dtoRecipes,
+            };
+            return dto;
+
+
+
+
+        }
+
+        public static GetSingleUserMenuDTO MapGetSingleUserMenuDTOGenerated(this UserMenu domainUserMenu)
+        {
+            if (domainUserMenu == null)
+            {
+                throw new ArgumentNullException(nameof(domainUserMenu));
+            }
+
+            ICollection<GetSingleRecipeDTO> dtoRecipes = new List<GetSingleRecipeDTO>();
+            foreach (Recipe Recipe in domainUserMenu.Recipes)
             {
                 dtoRecipes.Add(MapGetSingleRecipeDTO(Recipe));
             }

@@ -6,6 +6,11 @@ services:
     build:
       context: .
       dockerfile: CookMaster.WebApi/Dockerfile
+    ports: 
+     - "80:8080"
+     # - "443:8080"
+    volumes:
+     - webapi:/code
     depends_on: 
     - cookmaster_db
   cookmaster_db:
@@ -24,7 +29,8 @@ services:
 volumes:
   # SQL Server data volume
   cookmaster_data:
+  webapi:
   # define smtp service volume
-  smtp4dev-data:
+  # smtp4dev-data:
     # Define the volume to persist SQL Server data
     
