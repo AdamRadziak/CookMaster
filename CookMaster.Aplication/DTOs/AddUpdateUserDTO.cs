@@ -4,7 +4,7 @@
     {
         public string? EmailHash { get; set; }
 
-        public string? PasswordHash { get; set; } = null;
+        public string? PasswordHash { get; set; }
 
         public bool IsPassswordUpdate { get; set; } = true;
 

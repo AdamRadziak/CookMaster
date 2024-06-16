@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CookMaster.Aplication.DTOs;
+using CookMaster.Aplication.Utils;
 using CookMaster.Persistance.SqlServer.Model;
 using System.Collections;
 
@@ -9,9 +10,21 @@ namespace CookMaster.Aplication.Mappings
     {
         public static GetSingleUserDTO MapGetSingleUserDTO(this User domainUser)
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<User, GetSingleUserDTO>());
-            var mapper = new Mapper(config);
-            GetSingleUserDTO dto = mapper.Map<GetSingleUserDTO>(domainUser);
+            if (domainUser == null)
+            { throw new ArgumentNullException(nameof(User)); }
+            // decode password and email from base 64
+            string EncodedEmail = Base64EncodeDecode.Base64Encode(domainUser.Email);
+            string EncodedPass = Base64EncodeDecode.Base64Encode(domainUser.Password);
+            GetSingleUserDTO dto = new()
+            {
+                Id = domainUser.Id,
+                EmailHash = EncodedEmail,
+                PasswordHash = EncodedPass
+            };
+
+            //var config = new MapperConfiguration(cfg => cfg.CreateMap<User, GetSingleUserDTO>());
+            //var mapper = new Mapper(config);
+            //GetSingleUserDTO dto = mapper.Map<GetSingleUserDTO>(domainUser);
             return dto;
         }
 

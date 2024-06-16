@@ -3,8 +3,9 @@
     public class GetSingleUserDTO
     {
         public int Id { get; set; }
-        public string Email { get; set; } = null!;
-        public string Password { get; set; } = null!;
+        public string? EmailHash { get; set; }
+
+        public string? PasswordHash { get; set; }
 
     }
 }

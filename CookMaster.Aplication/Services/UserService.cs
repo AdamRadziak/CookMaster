@@ -54,11 +54,11 @@ namespace CookMaster.Aplication.Services
                     return (false, default(User), HttpStatusCode.BadRequest, "Username with email: " + DecodedEmail + " not exist in the database");
                 }
 
-                string encodedEmail = Base64EncodeDecode.Base64Encode(existingEntityResult.Email);
-                string encodedPass = Base64EncodeDecode.Base64Encode(existingEntityResult.Password);
-                // replace in existing entity result encoded values
-                existingEntityResult.Email = encodedEmail;
-                existingEntityResult.Password = encodedPass;
+                //string encodedEmail = Base64EncodeDecode.Base64Encode(existingEntityResult.Email);
+                //string encodedPass = Base64EncodeDecode.Base64Encode(existingEntityResult.Password);
+                //// replace in existing entity result encoded values
+                //existingEntityResult.Email = encodedEmail;
+                //existingEntityResult.Password = encodedPass;
 
 
                 return (true, existingEntityResult, HttpStatusCode.OK, String.Empty);

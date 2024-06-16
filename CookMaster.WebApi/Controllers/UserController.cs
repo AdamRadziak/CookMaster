@@ -2,10 +2,12 @@
 using CookMaster.Aplication.Helpers.PagedList;
 using CookMaster.Aplication.Mappings;
 using CookMaster.Aplication.Services.Interfaces;
+using CookMaster.Aplication.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sieve.Models;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
 using System.Reflection;
 
 namespace CookMaster.WebApi.Controllers
@@ -52,6 +54,23 @@ namespace CookMaster.WebApi.Controllers
             }
 
             return Ok(result.entityList);
+        }
+
+        [Authorize]
+        [HttpGet("LogInByEmail/{emailHash}/Password/{passwordHash}")]
+        [SwaggerOperation(OperationId = "LogInByEmailAndPassword")]
+        public async Task<ActionResult<GetSingleUserDTO>> LogInUser(string emailHash, string passwordHash)
+        {
+            String decodedEmail = Base64EncodeDecode.Base64Decode(emailHash);
+            String decodedPassword = Base64EncodeDecode.Base64Decode(passwordHash);
+            var result = await _userService.VerifyPasswordByEmail(decodedEmail, decodedPassword);
+
+            if (!result.IsSuccess)
+            {
+                return Problem(statusCode: (int)result.StatusCode, title: "Read error.", detail: result.ErrorMessage);
+            }
+
+            return StatusCode((int)result.StatusCode, result.entity!.MapGetSingleUserDTO());
         }
 
         [HttpPost("register")]
