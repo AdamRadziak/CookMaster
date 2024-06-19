@@ -90,11 +90,11 @@ namespace CookMaster.WebApi.Controllers
             return StatusCode((int)result.StatusCode, result.entity.MapGetSingleRecipeDTO());
         }
 
-        [HttpPost("AddFavourite/{IdRecipe}/ForUser/{Email}")]
+        [HttpPost("AddFavourite/{IdRecipe}/ForUser/{idUser}")]
         [SwaggerOperation(OperationId = "AddToFavouritites")]
-        public async Task<ActionResult<GetSingleRecipeDTO>> AddRecipe2Favouritites(int IdRecipe,string Email)
+        public async Task<ActionResult<GetSingleRecipeDTO>> AddRecipe2Favouritites(int IdRecipe,int idUser)
         {
-            var result = await _service.AddRecipe2FavouritesAsync(IdRecipe, Email);
+            var result = await _service.AddRecipe2FavouritesAsync(IdRecipe, idUser);
 
             if (!result.IsSuccess)
             {
@@ -104,11 +104,11 @@ namespace CookMaster.WebApi.Controllers
             return StatusCode((int)result.StatusCode, result.entity.MapGetSingleRecipeDTO());
         }
 
-        [HttpGet("list/GetFavourities/ForUser/{Email}")]
+        [HttpGet("list/GetFavourities/ForUser/{idUser}")]
         [SwaggerOperation(OperationId = "GetFavourities")]
-        public async Task<ActionResult<IPagedList<GetSingleRecipeDTO>>> GetFavouritites([FromQuery] SieveModel paginationParams, string Email)
+        public async Task<ActionResult<IPagedList<GetSingleRecipeDTO>>> GetFavouritites([FromQuery] SieveModel paginationParams, int idUser)
         {
-            var result = await _service.GetFavouritesAsync<GetSingleRecipeDTO>(Email,paginationParams);
+            var result = await _service.GetFavouritesAsync<GetSingleRecipeDTO>(idUser,paginationParams);
 
             if (!result.IsSuccess)
             {
@@ -135,12 +135,12 @@ namespace CookMaster.WebApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete("DeleteFavourite/{id}/ForUser/{Email}")]
+        [HttpDelete("DeleteFavourite/{id}/ForUser/{idUser}")]
         [SwaggerOperation(OperationId = "DeleteRecipeFromFavourities")]
-        public async Task<IActionResult> DeleteRecipeFromFavourite(int id, string Email)
+        public async Task<IActionResult> DeleteRecipeFromFavourite(int id, int idUser)
         {
 
-            var result = await _service.DeleteFromFavouriteAsync(id,Email);
+            var result = await _service.DeleteFromFavouriteAsync(id,idUser);
 
             if (!result.IsSuccess)
             {

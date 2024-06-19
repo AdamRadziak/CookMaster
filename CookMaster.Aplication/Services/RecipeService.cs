@@ -114,7 +114,7 @@ namespace CookMaster.Aplication.Services
             }
         }
 
-        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> AddRecipe2FavouritesAsync(int IdRecipe, string UserEmail)
+        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> AddRecipe2FavouritesAsync(int IdRecipe, int idUser)
         {
             try
             {
@@ -124,14 +124,14 @@ namespace CookMaster.Aplication.Services
                 {
                     return existingEntityResult;
                 }
-                // if this user not exist
-                if (!await _unitOfWork.UserRepository.EmailExistsAsync(UserEmail))
-                {
-                    return (false, default(Recipe), HttpStatusCode.BadRequest, "User Email" + UserEmail + "not exist in the database");
-                }
+                //// if this user not exist
+                //if (!await _unitOfWork.UserRepository.EmailExistsAsync(UserEmail))
+                //{
+                //    return (false, default(Recipe), HttpStatusCode.BadRequest, "User Email" + UserEmail + "not exist in the database");
+                //}
                 // add selected IdUser to IdUser in Recipe
-                var userEntity = _unitOfWork.UserRepository.GetByEmailAsync(UserEmail);
-                existingEntityResult.entity.IdUser = userEntity.Id;
+                //var userEntity = _unitOfWork.UserRepository.GetByIdAsync(idUser);
+                existingEntityResult.entity.IdUser = idUser;
 
 
                 return await UpdateAndSaveAsync(existingEntityResult.entity, IdRecipe);
@@ -145,21 +145,21 @@ namespace CookMaster.Aplication.Services
             }
         }
 
-        public async Task<(bool IsSuccess, IPagedList<GetSingleRecipeDTO>? entityList, HttpStatusCode StatusCode, string ErrorMessage)> GetFavouritesAsync<TOut>(string UserEmail, SieveModel paginationParams)
+        public async Task<(bool IsSuccess, IPagedList<GetSingleRecipeDTO>? entityList, HttpStatusCode StatusCode, string ErrorMessage)> GetFavouritesAsync<TOut>(int idUser, SieveModel paginationParams)
         {
             try
             {
                 // if this user not exist
-                if (!await _unitOfWork.UserRepository.EmailExistsAsync(UserEmail))
-                {
-                    return (false, default(IPagedList<GetSingleRecipeDTO>), HttpStatusCode.BadRequest, "User Email" + UserEmail + "not exist in the database");
-                }
-                var query = _unitOfWork.RecipeRepository.GetFavouritiesByUser(UserEmail);
+                //if (!await _unitOfWork.UserRepository.EmailExistsAsync(UserEmail))
+                //{
+                //    return (false, default(IPagedList<GetSingleRecipeDTO>), HttpStatusCode.BadRequest, "User Email" + UserEmail + "not exist in the database");
+                //}
+                var query = _unitOfWork.RecipeRepository.GetFavouritiesByUser(idUser);
                 var result = await query.ToPagedListAsync(_sieveProcessor, _sieveOptions, paginationParams, resultEntity => Domain2DTOMapper.MapGetSingleRecipeDTO(resultEntity));
                 // if query return null
                 if (query.Equals(null))
                 {
-                    return (false, default(IPagedList<GetSingleRecipeDTO>), HttpStatusCode.NotFound, "User with email " + UserEmail + " do not have favourite recipes");
+                    return (false, default(IPagedList<GetSingleRecipeDTO>), HttpStatusCode.NotFound, "User with id " + idUser + " do not have favourite recipes");
                 }
                 else
                 {
@@ -198,7 +198,7 @@ namespace CookMaster.Aplication.Services
                 
         }
 
-        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteFromFavouriteAsync(int Id, string Useremail)
+        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteFromFavouriteAsync(int Id, int idUser)
         {
             try
             {
@@ -209,11 +209,11 @@ namespace CookMaster.Aplication.Services
                     return existingEntityResult;
                 }
                 // if this user not exist
-                if (!await _unitOfWork.UserRepository.EmailExistsAsync(Useremail))
-                {
-                    return (false, default(Recipe), HttpStatusCode.BadRequest, "User Email" + Useremail + "not exist in the database");
-                }
-                var query = await _unitOfWork.RecipeRepository.GetFavouritiesByUser(Useremail).ToListAsync();
+                //if (!await _unitOfWork.UserRepository.EmailExistsAsync(Useremail))
+                //{
+                //    return (false, default(Recipe), HttpStatusCode.BadRequest, "User Email" + Useremail + "not exist in the database");
+                //}
+                var query = await _unitOfWork.RecipeRepository.GetFavouritiesByUser(idUser).ToListAsync();
                 // get favourite from user by id
                 var existingEntity = query.FirstOrDefault(query => query.Id == Id);
                 existingEntityResult.entity.IdUser = null;

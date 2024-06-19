@@ -49,12 +49,12 @@ namespace CookMaster.Persistence.Repositories
             return query;
         }
 
-        public  IQueryable<Recipe> GetFavouritiesByUser(string email)
+        public  IQueryable<Recipe> GetFavouritiesByUser(int idUser)
         {
             var query =  Entities.Include(e => e.Photos)
                                        .Include(e => e.Products)
                                        .Include(e => e.Steps)
-                                       .Where(e => e.IdUserNavigation.Email == email).AsQueryable();
+                                       .Where(e => e.IdUserNavigation.Id == idUser).AsQueryable();
             return query;
         }
 
