@@ -124,13 +124,6 @@ namespace CookMaster.Aplication.Services
                 {
                     return existingEntityResult;
                 }
-                //// if this user not exist
-                //if (!await _unitOfWork.UserRepository.EmailExistsAsync(UserEmail))
-                //{
-                //    return (false, default(Recipe), HttpStatusCode.BadRequest, "User Email" + UserEmail + "not exist in the database");
-                //}
-                // add selected IdUser to IdUser in Recipe
-                //var userEntity = _unitOfWork.UserRepository.GetByIdAsync(idUser);
                 existingEntityResult.entity.IdUser = idUser;
 
 
@@ -178,20 +171,26 @@ namespace CookMaster.Aplication.Services
 
         public async  Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteRecipe(int Id)
         {
-            
-            // add null to foreign key in receipe
-            var recipe = _unitOfWork.RecipeRepository.GetByIdAsync(Id);
-            recipe.Result.IdMenu = null;
-            recipe.Result.IdUser = null;
-            var resultUpdate = UpdateAndSaveAsync(recipe.Result, Id);
-            // delete and save async recipe
-            if (resultUpdate.Result.IsSuccess)
+            try
             {
-                return await DeleteAndSaveAsync(Id);
+                // add null to foreign key in receipe
+                var recipe = _unitOfWork.RecipeRepository.GetByIdAsync(Id);
+                recipe.Result.IdMenu = null;
+                recipe.Result.IdUser = null;
+                var resultUpdate = UpdateAndSaveAsync(recipe.Result, Id);
+                // delete and save async recipe
+                if (resultUpdate.Result.IsSuccess)
+                {
+                    return await DeleteAndSaveAsync(Id);
+                }
+                else
+                {
+                    return (false, default(Recipe), HttpStatusCode.BadRequest, "Delete error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return (false, default(Recipe), HttpStatusCode.BadRequest, "Delete error");
+                return LogError(ex.Message);
             }
 
 
@@ -208,11 +207,6 @@ namespace CookMaster.Aplication.Services
                 {
                     return existingEntityResult;
                 }
-                // if this user not exist
-                //if (!await _unitOfWork.UserRepository.EmailExistsAsync(Useremail))
-                //{
-                //    return (false, default(Recipe), HttpStatusCode.BadRequest, "User Email" + Useremail + "not exist in the database");
-                //}
                 var query = await _unitOfWork.RecipeRepository.GetFavouritiesByUser(idUser).ToListAsync();
                 // get favourite from user by id
                 var existingEntity = query.FirstOrDefault(query => query.Id == Id);
@@ -269,6 +263,26 @@ namespace CookMaster.Aplication.Services
             catch (Exception ex)
             {
                return (false, default(ICollection<Recipe>), HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        public async Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachFavouriteRecipesFromUser(int IdUser)
+        {
+            try
+            {
+                ICollection<Recipe> Recipes = _unitOfWork.RecipeRepository.GetFavouritiesByUser(IdUser).ToList();
+                // add IdRecipe null to photos
+                foreach (Recipe r in Recipes)
+                {
+                    r.IdUser = null;
+                    r.IdUserNavigation = null;
+                    var result = await UpdateAndSaveAsync(r, r.Id);
+                }
+                return (true, default(Recipe), HttpStatusCode.OK, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return LogError(ex.Message);
             }
         }
     }

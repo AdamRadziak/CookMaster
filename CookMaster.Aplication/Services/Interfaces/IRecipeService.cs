@@ -28,6 +28,7 @@ namespace CookMaster.Aplication.Services.Interfaces
 
         Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteFromFavouriteAsync(int Id, int idUser);
         Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachRecipesFromUserMenuAsync(int IdMenu);
+        Task<(bool IsSuccess, Recipe? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachFavouriteRecipesFromUser(int IdUser);
 
         Task<(bool IsSuccess, ICollection<Recipe> recipes, HttpStatusCode StatusCode, string ErrorMessage)> GetRecipesFromUserMenuAsync(int IdMenu);
 

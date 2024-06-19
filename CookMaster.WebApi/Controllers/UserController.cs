@@ -18,11 +18,17 @@ namespace CookMaster.WebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IRecipeService _recipeService;
+        private readonly IUserMenuService _userMenuService;
+
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService, ILogger<UserController> logger)
+        public UserController(IUserService userService, IRecipeService recipeService,
+            IUserMenuService userMenuService, ILogger<UserController> logger)
         {
             _userService = userService;
+            _recipeService = recipeService;
+            _userMenuService = userMenuService;
             _logger = logger;
         }
 
@@ -122,6 +128,18 @@ namespace CookMaster.WebApi.Controllers
         [SwaggerOperation(OperationId = "DeleteUser")]
         public async Task<IActionResult> DeleteUser(int id)
         {
+            //rdeatach from userMenu
+            var reultUserMenu = await _userMenuService.DeatachUserMenusFromUser(id);
+            if (!reultUserMenu.IsSuccess)
+            {
+                return Problem(statusCode: (int)reultUserMenu.StatusCode, title: "Delete error.", detail: reultUserMenu.ErrorMessage);
+            }
+            // deatach from recipes
+            var resultRecipes = await _recipeService.DeatachFavouriteRecipesFromUser(id);
+            if (!resultRecipes.IsSuccess)
+            {
+                return Problem(statusCode: (int)resultRecipes.StatusCode, title: "Delete error.", detail: resultRecipes.ErrorMessage);
+            }
             var result = await _userService.DeleteAndSaveAsync(id);
 
             if (!result.IsSuccess)

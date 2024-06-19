@@ -18,6 +18,7 @@ namespace CookMaster.Aplication.Services.Interfaces
         Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> GenerateUserMenuAsync(GenerateUserMenuDTO dto);
         Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> UpdateUserMenuAsync(AddUpdateUserMenuDTO dto, int id);
         Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteUserMenuAsync(int Id);
+        Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachUserMenusFromUser(int idUser);
 
 
     }

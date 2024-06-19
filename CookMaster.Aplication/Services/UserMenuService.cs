@@ -12,6 +12,7 @@ using Sieve.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,20 +25,50 @@ namespace CookMaster.Aplication.Services
         {
         }
 
+        public async Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeatachUserMenusFromUser(int idUser)
+        {
+            try
+            {
+                var userMenus = _unitOfWork.UserMenuRepository.GetAllByUserIdAsync(50, idUser).ToList();
+                // add null to IdUser in userMenu
+                foreach (UserMenu userMenu in userMenus)
+                {
+                    userMenu.IdUser = null;
+                    userMenu.IdUserNavigation = null;
+                    var result = await UpdateAndSaveAsync(userMenu, userMenu.Id);
+                }
+                return (true, default(UserMenu), HttpStatusCode.OK, string.Empty);
+            }
+
+            catch (Exception ex)
+            {
+                return LogError(ex.Message);
+            }
+
+
+        }
+
         public async Task<(bool IsSuccess, UserMenu? entity, HttpStatusCode StatusCode, string ErrorMessage)> DeleteUserMenuAsync(int Id)
         {
-            // add null to foreign key in receipe
-            var userMenu = _unitOfWork.UserMenuRepository.GetByIdAsync(Id);
-            userMenu.Result.IdUser = null;
-            var resultUpdate = UpdateAndSaveAsync(userMenu.Result, Id);
-            // delete and save async recipe
-            if (resultUpdate.Result.IsSuccess)
+            try
             {
-                return await DeleteAndSaveAsync(Id);
+                // add null to foreign key in receipe
+                var userMenu = _unitOfWork.UserMenuRepository.GetByIdAsync(Id);
+                userMenu.Result.IdUser = null;
+                var resultUpdate = UpdateAndSaveAsync(userMenu.Result, Id);
+                // delete and save async recipe
+                if (resultUpdate.Result.IsSuccess)
+                {
+                    return await DeleteAndSaveAsync(Id);
+                }
+                else
+                {
+                    return (false, default(UserMenu), HttpStatusCode.BadRequest, "Delete error");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return (false, default(UserMenu), HttpStatusCode.BadRequest, "Delete error");
+                return LogError(ex.Message);
             }
         }
 
